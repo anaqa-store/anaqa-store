@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ملابس - لمسة أنثى</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; scroll-behavior: smooth; }
+        body { background-color: #faf6f7; color: #333; padding-bottom: 80px; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background-color: #fff; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 26px; font-weight: 700; color: #d65a7a; }
+        .menu-icon { display: block; font-size: 30px; cursor: pointer; color: #d65a7a; user-select: none; }
+        .nav-links { display: none; flex-direction: column; position: absolute; top: 80px; left: 20px; width: 250px; background-color: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.15); padding: 20px; border-radius: 10px; text-align: center; z-index: 999; }
+        .nav-links.active { display: flex; }
+        .nav-links a { text-decoration: none; color: #555; font-weight: bold; margin: 10px 0; }
+        .login-link { border-top: 1px solid #eee; padding-top: 15px !important; margin-top: 15px !important; color: #d65a7a !important; }
+        .category-section { padding: 60px 20px; text-align: center; }
+        .category-section h2 { font-size: 36px; color: #d65a7a; margin-bottom: 40px; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
+        .product-card { background-color: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.05); }
+        .product-card img { width: 100%; height: 300px; object-fit: cover; }
+        .product-info { padding: 20px; }
+        .product-info h3 { color: #333; font-size: 20px; margin-bottom: 10px; }
+        .product-info .price { color: #d65a7a; font-size: 22px; font-weight: bold; margin-bottom: 15px; display: block; }
+        .size-select { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: 'Tajawal', sans-serif; font-size: 16px; }
+        .add-to-cart { background-color: #f0e6e8; color: #d65a7a; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px; }
+        .add-to-cart:hover { background-color: #d65a7a; color: white; }
+        .cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #fff; box-shadow: 0 -2px 15px rgba(0,0,0,0.1); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
+        .cart-info { font-weight: bold; font-size: 18px; color: #333; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        .cart-count { background-color: #d65a7a; color: white; border-radius: 50%; padding: 2px 8px; font-size: 14px; }
+        .checkout-btn { background-color: #25D366; color: white; border: none; padding: 12px 25px; border-radius: 30px; font-weight: bold; font-size: 16px; cursor: pointer; }
+        .cart-modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; }
+        .cart-modal-content { background: #fff; width: 90%; max-width: 500px; padding: 20px; border-radius: 15px; max-height: 80vh; overflow-y: auto; color: #333; }
+        .cart-modal h2 { color: #d65a7a; text-align: center; margin-bottom: 20px; }
+        .cart-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; padding: 10px 0; font-size: 16px; }
+        .remove-btn { background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        .close-modal { display: block; width: 100%; text-align: center; margin-top: 20px; background: #333; color: white; padding: 10px; border: none; border-radius: 8px; cursor: pointer; }
+        footer { background-color: #333; color: #ccc; text-align: center; padding: 30px; margin-top: 50px; }
+        @media (max-width: 768px) { .navbar { padding: 15px 20px; } .nav-links { width: 90%; left: 5%; } .cart-bar { flex-direction: column; gap: 10px; } .checkout-btn { width: 100%; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">🌸 لمسة أنثى</div>
+        <div class="nav-links" id="nav-links">
+            <a href="shop.html">الرئيسية</a>
+            <a href="clothes.html" style="color: #d65a7a;">ملابس</a>
+            <a href="makeup.html">مكياجات</a>
+            <a href="toys.html">ألعاب أطفال</a>
+            <a href="login.html" class="login-link">👤 تسجيل الدخول / حسابي</a>
+        </div>
+        <div class="menu-icon" id="menu-icon">☰</div>
+    </nav>
+    <section class="category-section">
+        <h2>👗 قسم الملابس</h2>
+        <div class="products-grid">
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60" alt="فستان">
+                <div class="product-info">
+                    <h3>فستان صيفي أنيق</h3>
+                    <span class="price">$45.00</span>
+                    <select id="size-1" class="size-select">
+                        <option value="">اختر المقاس...</option>
+                        <option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option>
+                    </select>
+                    <button class="add-to-cart" onclick="addToCart('فستان صيفي أنيق', 45, 'size-1')">أضيفي إلى السلة 🛒</button>
+                </div>
+            </div>
+            <div class="product-card">
+                <img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=500&q=60" alt="بلوزة">
+                <div class="product-info">
+                    <h3>بلوزة كاجوال</h3>
+                    <span class="price">$20.00</span>
+                    <select id="size-2" class="size-select">
+                        <option value="">اختر المقاس...</option>
+                        <option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option>
+                    </select>
+                    <button class="add-to-cart" onclick="addToCart('بلوزة كاجوال', 20, 'size-2')">أضيفي إلى السلة 🛒</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer><p>© 2024 متجر لمسة أنثى.</p></footer>
+    <div class="cart-bar">
+        <div class="cart-info" onclick="showCart()">🛒 عرض السلة <span class="cart-count" id="cart-count">0</span></div>
+        <button class="checkout-btn" onclick="checkout()">إتمام الطلب ✅</button>
+    </div>
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-modal-content">
+            <h2>سلة المشتريات</h2>
+            <div id="cart-items"></div>
+            <button class="close-modal" onclick="closeCart()">إغلاق</button>
+        </div>
+    </div>
+    <script>
+        const menuIcon = document.getElementById('menu-icon');
+        const navLinks = document.getElementById('nav-links');
+        menuIcon.addEventListener('click', () => { navLinks.classList.toggle('active'); menuIcon.textContent = navLinks.classList.contains('active') ? '✕' : '☰'; });
+        let cart = JSON.parse(localStorage.getItem('anaqaCart')) || [];
+        function updateCartCount() { document.getElementById('cart-count').innerText = cart.length; }
+        updateCartCount();
+        function addToCart(name, price, selectId) {
+            let size = document.getElementById(selectId).value;
+            if (!size) { alert("الرجاء اختيار المقاس أولاً!"); return; }
+            cart.push({ name: name, price: price, size: size });
+            localStorage.setItem('anaqaCart', JSON.stringify(cart));
+            updateCartCount();
+            alert("تمت إضافة " + name + " (مقاس " + size + ") للسلة!");
+        }
+        function showCart() {
+            let modal = document.getElementById('cart-modal'); let itemsDiv = document.getElementById('cart-items'); itemsDiv.innerHTML = '';
+            if (cart.length === 0) { itemsDiv.innerHTML = '<p style="text-align:center;">السلة فارغة</p>'; } else {
+                cart.forEach((item, index) => {
+                    let sizeText = item.size ? ` (مقاس: ${item.size})` : '';
+                    itemsDiv.innerHTML += `<div class="cart-item"><span>${item.name}${sizeText}</span><span>$${item.price} <button class="remove-btn" onclick="removeItem(${index})">❌</button></span></div>`;
+                });
+            }
+            modal.style.display = 'flex';
+        }
+        function closeCart() { document.getElementById('cart-modal').style.display = 'none'; }
+        function removeItem(index) { cart.splice(index, 1); localStorage.setItem('anaqaCart', JSON.stringify(cart)); updateCartCount(); showCart(); }
+        function checkout() {
+            if (cart.length === 0) { alert("السلة فارغة!"); return; }
+            let name = prompt("الاسم:"); let address = prompt("العنوان:"); let phone = prompt("الهاتف:");
+            if (!name || !address || !phone) { alert("أكمل البيانات."); return; }
+            let message = "مرحباً، طلب جديد:\n\n👤 " + name + "\n📍 " + address + "\n📞 " + phone + "\n\n🛍️ المنتجات:\n";
+            let total = 0;
+            cart.forEach((item, index) => { let sizeText = item.size ? ` (مقاس: ${item.size})` : ''; message += (index + 1) + ". " + item.name + sizeText + " - $" + item.price + "\n"; total += item.price; });
+            message += "\n💰 الإجمالي: $" + total;
+            window.location.href = "https://wa.me/905343283015?text=" + encodeURIComponent(message);
+            localStorage.removeItem('anaqaCart'); cart = []; updateCartCount(); closeCart();
+        }
+    </script>
+</body>
+</html>
