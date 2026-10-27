@@ -12,7 +12,6 @@
         
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background-color: #fff; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
         .logo { font-size: 26px; font-weight: 700; color: #d65a7a; }
-        
         .menu-icon { display: block; font-size: 30px; cursor: pointer; color: #d65a7a; user-select: none; }
         
         .nav-links { display: none; flex-direction: column; position: absolute; top: 80px; left: 20px; width: 250px; background-color: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.15); padding: 20px; border-radius: 10px; text-align: center; z-index: 999; }
@@ -22,7 +21,6 @@
         
         .login-link { border-top: 1px solid #eee; padding-top: 15px !important; margin-top: 15px !important; color: #d65a7a !important; }
 
-        /* تنسيق رسالة الترحيب */
         .welcome-msg { font-size: 16px; color: #d65a7a; font-weight: bold; margin-top: 5px; }
 
         .hero { background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&w=1200&q=80'); background-size: cover; background-position: center; height: 60vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; color: white; padding: 20px; }
@@ -55,8 +53,14 @@
     </style>
 </head>
 <body>
+    <script>
+        // 🛑 حماية المتجر: إذا لم يسجل المستخدم دخوله، يتم طرده فوراً لصفحة تسجيل الدخول
+        if (!localStorage.getItem('loggedInUser')) {
+            window.location.href = 'login.html';
+        }
+    </script>
+
     <nav class="navbar">
-        <!-- إضافة رسالة الترحيب هنا -->
         <div>
             <div class="logo">🌸 لمسة أنثى</div>
             <div id="welcome-msg" class="welcome-msg"></div>
@@ -111,7 +115,6 @@
     </div>
 
     <script>
-        // كود عرض الترحيب باسم المستخدم
         const userName = localStorage.getItem('userName');
         if (userName) {
             document.getElementById('welcome-msg').innerText = 'أهلاً بك يا ' + userName + ' 🌸';
