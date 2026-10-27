@@ -63,10 +63,20 @@
         .rating { color: #ffc107; font-size: 14px; margin-bottom: 10px; }
         .rating span { color: #777; font-size: 12px; margin-right: 5px; }
 
-        .product-info .price { color: #d65a7a; font-size: 22px; font-weight: bold; margin-bottom: 15px; display: block; }
+        .product-info .price { color: #d65a7a; font-size: 22px; font-weight: bold; margin-bottom: 5px; display: block; }
+        .low-stock { color: #ff4d4d; font-size: 13px; font-weight: bold; margin-bottom: 10px; display: block; }
+        
         .add-to-cart { background-color: #f0e6e8; color: #d65a7a; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px; transition: 0.3s; }
         .add-to-cart:hover { background-color: #d65a7a; color: white; }
         
+        /* قسم آراء العملاء (جديد) */
+        .testimonials-section { padding: 60px 20px; background: #fff; text-align: center; }
+        .testimonials-section h2 { font-size: 32px; color: #d65a7a; margin-bottom: 40px; }
+        .testimonial-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; max-width: 1000px; margin: 0 auto; }
+        .testimonial-card { background: #faf6f7; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .testimonial-card p { font-style: italic; color: #555; line-height: 1.6; margin-bottom: 15px; }
+        .testimonial-card h4 { color: #d65a7a; }
+
         .cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #fff; box-shadow: 0 -2px 15px rgba(0,0,0,0.1); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
         .cart-info { font-weight: bold; font-size: 18px; color: #333; display: flex; align-items: center; gap: 10px; cursor: pointer; }
         .cart-count { background-color: #d65a7a; color: white; border-radius: 50%; padding: 2px 8px; font-size: 14px; }
@@ -107,6 +117,10 @@
         .floating-whatsapp { position: fixed; bottom: 90px; left: 20px; background-color: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 35px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); z-index: 1001; transition: 0.3s; text-decoration: none; }
         .floating-whatsapp:hover { transform: scale(1.1) rotate(10deg); background-color: #128C7E; }
 
+        .social-proof-popup { position: fixed; bottom: 170px; left: 20px; background: #fff; color: #333; padding: 15px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); display: none; z-index: 9998; border-right: 4px solid #25D366; max-width: 280px; font-size: 14px; animation: slideIn 0.5s forwards; }
+        .social-proof-popup img { width: 40px; height: 40px; border-radius: 5px; float: right; margin-left: 10px; object-fit: cover;}
+        @keyframes slideIn { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
         .wishlist-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 10px 0; }
         .wishlist-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; }
 
@@ -129,6 +143,7 @@
             .footer-container { text-align: center; }
             .social-icons { justify-content: center; }
             .floating-whatsapp { bottom: 20px; left: 20px; width: 50px; height: 50px; font-size: 28px; }
+            .social-proof-popup { bottom: 80px; max-width: 200px; font-size: 12px;}
         }
     </style>
 </head>
@@ -190,11 +205,12 @@
                     <button class="action-btn" id="fav-m1" onclick="toggleWishlist('fav-m1', 'أحمر شفاه مخملي', 18, 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&w=500&q=60')">🤍</button>
                     <button class="action-btn" onclick="shareProduct('أحمر شفاه مخملي', 18)">📲</button>
                 </div>
-                <img src="https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&w=500&q=60" alt="أحمر شفاه" onclick="openQuickView('أحمر شفاه مخملي', 18, 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&w=500&q=60', 'أحمر شفاه مخملي بتركيبة مرطبة تدوم طويلاً.')">
+                <img src="https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&w=500&q=60" alt="أحمر شفاه" loading="lazy" onclick="openQuickView('أحمر شفاه مخملي', 18, 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&w=500&q=60', 'أحمر شفاه مخملي بتركيبة مرطبة تدوم طويلاً.')">
                 <div class="product-info">
                     <h3 onclick="openQuickView('أحمر شفاه مخملي', 18, 'https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&w=500&q=60', 'أحمر شفاه مخملي بتركيبة مرطبة تدوم طويلاً.')">أحمر شفاه مخملي</h3>
                     <div class="rating">⭐⭐⭐⭐⭐ <span>(4.9)</span></div>
                     <span class="price">$18.00</span>
+                    <span class="low-stock">🔥 بقي 4 فقط!</span>
                     <button class="add-to-cart" onclick="addToCart('أحمر شفاه مخملي', 18)">أضيفي إلى السلة 🛒</button>
                 </div>
             </div>
@@ -205,13 +221,33 @@
                     <button class="action-btn" id="fav-m2" onclick="toggleWishlist('fav-m2', 'باليت ظلال العيون', 25, 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=500&q=60')">🤍</button>
                     <button class="action-btn" onclick="shareProduct('باليت ظلال العيون', 25)">📲</button>
                 </div>
-                <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=500&q=60" alt="باليت ظلال" onclick="openQuickView('باليت ظلال العيون', 25, 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=500&q=60', 'باليت ظلال بألوان ترابية ولامعة تناسب جميع الإطلالات.')">
+                <img src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=500&q=60" alt="باليت ظلال" loading="lazy" onclick="openQuickView('باليت ظلال العيون', 25, 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=500&q=60', 'باليت ظلال بألوان ترابية ولامعة تناسب جميع الإطلالات.')">
                 <div class="product-info">
                     <h3 onclick="openQuickView('باليت ظلال العيون', 25, 'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=500&q=60', 'باليت ظلال بألوان ترابية ولامعة تناسب جميع الإطلالات.')">باليت ظلال العيون</h3>
                     <div class="rating">⭐⭐⭐⭐ <span>(4.5)</span></div>
                     <span class="price">$25.00</span>
+                    <span class="low-stock">🔥 بقي 2 فقط!</span>
                     <button class="add-to-cart" onclick="addToCart('باليت ظلال العيون', 25)">أضيفي إلى السلة 🛒</button>
                 </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- قسم آراء العملاء (جديد) -->
+    <section class="testimonials-section">
+        <h2>🌟 ماذا قال عملاؤنا؟</h2>
+        <div class="testimonial-grid">
+            <div class="testimonial-card">
+                <p>"أفضل مكياج جربته في حياتي! التوصيل كان سريع جداً والمنتجات أصلية 100%. شكراً لمسة أنثى."</p>
+                <h4>- ريم عبدالله</h4>
+            </div>
+            <div class="testimonial-card">
+                <p>"الخدمة ممتازة والأسعار مناسبة جداً. أحمر الشفاه المخملي أصبح المفضل عندي!"</p>
+                <h4>- سارة أحمد</h4>
+            </div>
+            <div class="testimonial-card">
+                <p>"تعامل راقي جداً، وساعدوني في اختيار المقاس المناسب. سأكرر الشراء بالتأكيد."</p>
+                <h4>- مريم حسن</h4>
             </div>
         </div>
     </section>
@@ -253,6 +289,11 @@
 
     <button id="backToTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">↑</button>
     <a href="https://wa.me/905343283015" class="floating-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
+
+    <div class="social-proof-popup" id="social-proof-popup">
+        <img id="sp-image" src="" alt="product">
+        <span id="sp-text"></span>
+    </div>
 
     <div class="modal-overlay" id="quickview-modal">
         <div class="modal-content" style="text-align: center;">
@@ -308,6 +349,24 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({ once: true, offset: 50 });
+
+        const names = ["سارة من إسطنبول", "مريم من أنقرة", "ليلى من إزمير", "نور من بورصة", "هدى من أنطاليا"];
+        const boughtProducts = [
+            {name: "أحمر شفاه", img: "https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&w=100&q=60"},
+            {name: "باليت ظلال", img: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=100&q=60"}
+        ];
+
+        function showSocialProof() {
+            let randomName = names[Math.floor(Math.random() * names.length)];
+            let randomProduct = boughtProducts[Math.floor(Math.random() * boughtProducts.length)];
+            document.getElementById('sp-image').src = randomProduct.img;
+            document.getElementById('sp-text').innerText = `${randomName} اشترت ${randomProduct.name} للتو! 🎉`;
+            let popup = document.getElementById('social-proof-popup');
+            popup.style.display = 'block'; popup.style.animation = 'none'; popup.offsetHeight; popup.style.animation = 'slideIn 0.5s forwards';
+            setTimeout(() => { popup.style.display = 'none'; }, 6000);
+        }
+        setTimeout(showSocialProof, 5000);
+        setInterval(showSocialProof, 20000);
 
         function showToast(message) {
             let toast = document.getElementById('toast'); toast.innerText = message; toast.classList.add('show');
