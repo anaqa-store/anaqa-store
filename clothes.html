@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ملابس - لمسة أنثى</title>
-    <!-- مكتبة الحركات الانسيابية AOS -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
     <style>
@@ -12,14 +11,18 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; scroll-behavior: smooth; }
         body { background-color: #faf6f7; color: #333; padding-bottom: 80px; overflow-x: hidden; }
         
-        .announcement-bar { background-color: #d65a7a; color: white; text-align: center; padding: 10px; font-size: 14px; font-weight: bold; position: relative; z-index: 1001; }
+        /* شريط التخفيضات المتحرك */
+        .marquee-bar { background-color: #333; color: #ffc107; padding: 8px 0; overflow: hidden; white-space: nowrap; position: relative; z-index: 1002; font-weight: bold; font-size: 14px; }
+        .marquee-text { display: inline-block; animation: marquee 15s linear infinite; }
+        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+
         .navbar { display: flex; justify-content: space-between; align-items: center; padding: 20px 50px; background-color: #fff; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
         .logo { font-size: 26px; font-weight: 700; color: #d65a7a; }
         .menu-icon { display: block; font-size: 30px; cursor: pointer; color: #d65a7a; user-select: none; }
         
         .nav-links { display: none; flex-direction: column; position: absolute; top: 100px; left: 20px; width: 250px; background-color: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.15); padding: 20px; border-radius: 10px; text-align: center; z-index: 999; }
         .nav-links.active { display: flex; }
-        .nav-links a { text-decoration: none; color: #555; font-weight: bold; margin: 10px 0; }
+        .nav-links a { text-decoration: none; color: #555; font-weight: bold; margin: 10px 0; font-size: 16px;}
         .login-link { border-top: 1px solid #eee; padding-top: 15px !important; margin-top: 15px !important; color: #d65a7a !important; }
         .welcome-msg { font-size: 16px; color: #d65a7a; font-weight: bold; margin-top: 5px; }
         
@@ -35,7 +38,6 @@
         .countdown-timer { display: flex; justify-content: center; gap: 15px; font-size: 24px; font-weight: bold; color: #ffc107; }
         .time-box { background: #444; padding: 5px 15px; border-radius: 5px; }
 
-        /* فلتر الترتيب */
         .filter-section { text-align: center; margin-bottom: 20px; }
         .sort-select { padding: 10px 20px; border-radius: 20px; border: 1px solid #d65a7a; font-family: 'Tajawal', sans-serif; font-size: 16px; outline: none; background: white; color: #d65a7a; font-weight: bold; cursor: pointer; }
 
@@ -43,14 +45,13 @@
         .category-section h2 { font-size: 36px; color: #d65a7a; margin-bottom: 20px; }
         
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
-        .product-card { background-color: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.05); position: relative; }
+        .product-card { background-color: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.05); position: relative; transition: 0.3s; }
         
-        /* شارات العروض */
         .badge { position: absolute; top: 15px; left: 15px; padding: 5px 10px; border-radius: 5px; color: white; font-weight: bold; font-size: 12px; z-index: 10; }
         .badge-sale { background-color: #ff4d4d; }
         .badge-hot { background-color: #ff9800; }
 
-        .product-card img { width: 100%; height: 300px; object-fit: cover; transition: 0.3s; }
+        .product-card img { width: 100%; height: 300px; object-fit: cover; transition: 0.3s; cursor: pointer; }
         .product-card:hover img { transform: scale(1.05); }
         
         .product-actions { position: absolute; top: 15px; right: 15px; display: flex; flex-direction: column; gap: 10px; z-index: 10; }
@@ -59,9 +60,7 @@
         .action-btn.active { color: #ff4d4d; }
 
         .product-info { padding: 20px; }
-        .product-info h3 { color: #333; font-size: 20px; margin-bottom: 5px; }
-        
-        /* تقييم النجوم */
+        .product-info h3 { color: #333; font-size: 20px; margin-bottom: 5px; cursor: pointer; }
         .rating { color: #ffc107; font-size: 14px; margin-bottom: 10px; }
         .rating span { color: #777; font-size: 12px; margin-right: 5px; }
 
@@ -76,9 +75,10 @@
         .checkout-btn { background-color: #25D366; color: white; border: none; padding: 12px 25px; border-radius: 30px; font-weight: bold; font-size: 16px; cursor: pointer; }
 
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; }
-        .modal-content { background: #fff; width: 90%; max-width: 450px; padding: 30px; border-radius: 15px; max-height: 85vh; overflow-y: auto; color: #333; }
+        .modal-content { background: #fff; width: 90%; max-width: 450px; padding: 30px; border-radius: 15px; max-height: 85vh; overflow-y: auto; color: #333; position: relative; }
         .modal-content h2 { color: #d65a7a; text-align: center; margin-bottom: 20px; }
-        
+        .close-x { position: absolute; top: 10px; left: 15px; font-size: 24px; cursor: pointer; color: #777; }
+
         .cart-item { display: flex; flex-direction: column; border-bottom: 1px solid #eee; padding: 15px 0; gap: 10px; }
         .cart-item-header { display: flex; justify-content: space-between; font-weight: bold; font-size: 16px; }
         .cart-item-controls { display: flex; justify-content: space-between; align-items: center; }
@@ -108,6 +108,12 @@
         
         .wishlist-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 10px 0; }
         .wishlist-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; }
+
+        /* تصميم سجل الطلبات */
+        .order-card { border: 1px solid #ddd; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
+        .order-header { display: flex; justify-content: space-between; font-weight: bold; color: #d65a7a; margin-bottom: 10px; border-bottom: 1px dashed #ddd; padding-bottom: 10px; }
+        .order-items { font-size: 14px; color: #555; line-height: 1.6; }
+        .order-total { text-align: left; font-weight: bold; margin-top: 10px; color: #333; }
         
         footer { background-color: #333; color: #ccc; text-align: center; padding: 30px; margin-top: 50px; }
         @media (max-width: 768px) { .navbar { padding: 15px 20px; flex-direction: column; gap: 10px; } .nav-links { width: 90%; left: 5%; top: 150px; } .search-bar { width: 100%; } .cart-bar { flex-direction: column; gap: 10px; } .checkout-btn { width: 100%; } .header-icons { margin-top: 10px; } }
@@ -118,7 +124,9 @@
         if (!localStorage.getItem('loggedInUser')) { window.location.href = 'login.html'; }
     </script>
 
-    <div class="announcement-bar">🚚 شحن مجاني للطلبات فوق 50 دولار!</div>
+    <div class="marquee-bar">
+        <div class="marquee-text">🔥 تخفيضات حصرية لفترة محدودة! استخدمي كود BASEL10 للحصول على خصم إضافي 10%! 🔥</div>
+    </div>
 
     <nav class="navbar">
         <div>
@@ -140,11 +148,11 @@
             <a href="clothes.html" style="color: #d65a7a;">ملابس</a>
             <a href="makeup.html">مكياجات</a>
             <a href="toys.html">ألعاب أطفال</a>
+            <a href="#" onclick="showOrderHistory(); return false;">📦 طلباتي السابقة</a>
             <a href="login.html" class="login-link" id="auth-action-btn">👤 تسجيل الدخول / حسابي</a>
         </div>
     </nav>
 
-    <!-- المؤقت التنازلي -->
     <div class="countdown-container">
         <div class="countdown-title">🔥 عرض خاص ينتهي خلال:</div>
         <div class="countdown-timer">
@@ -157,7 +165,6 @@
     <section class="category-section">
         <h2>👗 قسم الملابس</h2>
         
-        <!-- فلتر الترتيب -->
         <div class="filter-section">
             <select id="sortSelect" class="sort-select" onchange="sortProducts()">
                 <option value="default">ترتيب افتراضي</option>
@@ -167,16 +174,15 @@
         </div>
 
         <div class="products-grid" id="products-container">
-            <!-- المنتج الأول -->
             <div class="product-card" data-aos="fade-up" data-aos-delay="100">
                 <div class="badge badge-sale">خصم 20%</div>
                 <div class="product-actions">
                     <button class="action-btn" id="fav-1" onclick="toggleWishlist('fav-1', 'فستان صيفي أنيق', 45, 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60')">🤍</button>
                     <button class="action-btn" onclick="shareProduct('فستان صيفي أنيق', 45)">📲</button>
                 </div>
-                <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60" alt="فستان">
+                <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60" alt="فستان" onclick="openQuickView('فستان صيفي أنيق', 45, 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60', 'فستان صيفي أنيق ومريح، مصنوع من أجود أنواع الأقمشة، مثالي للخروج والمناسبات.')">
                 <div class="product-info">
-                    <h3>فستان صيفي أنيق</h3>
+                    <h3 onclick="openQuickView('فستان صيفي أنيق', 45, 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60', 'فستان صيفي أنيق ومريح، مصنوع من أجود أنواع الأقمشة، مثالي للخروج والمناسبات.')">فستان صيفي أنيق</h3>
                     <div class="rating">⭐⭐⭐⭐⭐ <span>(4.8)</span></div>
                     <span class="price">$45.00</span>
                     <select id="size-1" class="size-select">
@@ -187,16 +193,15 @@
                 </div>
             </div>
             
-            <!-- المنتج الثاني -->
             <div class="product-card" data-aos="fade-up" data-aos-delay="200">
                 <div class="badge badge-hot">الأكثر مبيعاً 🔥</div>
                 <div class="product-actions">
                     <button class="action-btn" id="fav-2" onclick="toggleWishlist('fav-2', 'بلوزة كاجوال', 20, 'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=500&q=60')">🤍</button>
                     <button class="action-btn" onclick="shareProduct('بلوزة كاجوال', 20)">📲</button>
                 </div>
-                <img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=500&q=60" alt="بلوزة">
+                <img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=500&q=60" alt="بلوزة" onclick="openQuickView('بلوزة كاجوال', 20, 'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=500&q=60', 'بلوزة كاجوال ناعمة ومريحة، مناسبة للاستخدام اليومي.')">
                 <div class="product-info">
-                    <h3>بلوزة كاجوال</h3>
+                    <h3 onclick="openQuickView('بلوزة كاجوال', 20, 'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=500&q=60', 'بلوزة كاجوال ناعمة ومريحة، مناسبة للاستخدام اليومي.')">بلوزة كاجوال</h3>
                     <div class="rating">⭐⭐⭐⭐ <span>(4.2)</span></div>
                     <span class="price">$20.00</span>
                     <select id="size-2" class="size-select">
@@ -218,15 +223,26 @@
 
     <button id="backToTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">↑</button>
 
-    <!-- نافذة السلة -->
+    <!-- نافذة العرض السريع (جديد) -->
+    <div class="modal-overlay" id="quickview-modal">
+        <div class="modal-content" style="text-align: center;">
+            <span class="close-x" onclick="closeModal('quickview-modal')">&times;</span>
+            <img id="qv-image" src="" alt="Product" style="width: 100%; height: 250px; object-fit: cover; border-radius: 10px; margin-bottom: 15px;">
+            <h2 id="qv-title" style="margin-bottom: 10px;"></h2>
+            <div class="rating" style="font-size: 18px; margin-bottom: 10px;">⭐⭐⭐⭐⭐</div>
+            <p id="qv-desc" style="color: #777; margin-bottom: 20px; line-height: 1.6;"></p>
+            <h3 id="qv-price" style="color: #d65a7a; font-size: 24px; margin-bottom: 20px;"></h3>
+            <button class="confirm-btn" onclick="addToCartFromQuickView()">أضيفي إلى السلة 🛒</button>
+        </div>
+    </div>
+
     <div class="modal-overlay" id="cart-modal">
         <div class="modal-content">
+            <span class="close-x" onclick="closeModal('cart-modal')">&times;</span>
             <h2>سلة المشتريات</h2>
             <div class="shipping-progress-container">
                 <div class="shipping-text" id="shippingText">أضيفي منتجات للحصول على شحن مجاني!</div>
-                <div class="shipping-bar-bg">
-                    <div class="shipping-bar-fill" id="shippingBar"></div>
-                </div>
+                <div class="shipping-bar-bg"><div class="shipping-bar-fill" id="shippingBar"></div></div>
             </div>
             <div id="cart-items"></div>
             <div class="discount-section">
@@ -237,9 +253,9 @@
         </div>
     </div>
 
-    <!-- نافذة إتمام الطلب -->
     <div class="modal-overlay" id="checkout-modal">
         <div class="modal-content">
+            <span class="close-x" onclick="closeModal('checkout-modal')">&times;</span>
             <h2>تأكيد بيانات الشحن</h2>
             <input type="text" id="checkoutName" class="checkout-input" placeholder="الاسم بالكامل">
             <input type="tel" id="checkoutPhone" class="checkout-input" placeholder="رقم الهاتف">
@@ -249,18 +265,25 @@
         </div>
     </div>
 
-    <!-- نافذة المفضلة -->
     <div class="modal-overlay" id="wishlist-modal">
         <div class="modal-content">
+            <span class="close-x" onclick="closeModal('wishlist-modal')">&times;</span>
             <h2>❤️ قائمة المفضلة</h2>
             <div id="wishlist-items"></div>
-            <button class="cancel-btn" style="margin-top: 20px;" onclick="closeModal('wishlist-modal')">إغلاق</button>
+        </div>
+    </div>
+
+    <!-- نافذة سجل الطلبات (جديد) -->
+    <div class="modal-overlay" id="history-modal">
+        <div class="modal-content">
+            <span class="close-x" onclick="closeModal('history-modal')">&times;</span>
+            <h2>📦 سجل طلباتي</h2>
+            <div id="order-history-items"></div>
         </div>
     </div>
 
     <div id="toast" class="toast"></div>
 
-    <!-- استدعاء مكتبة AOS -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({ once: true, offset: 50 });
@@ -270,23 +293,62 @@
             setTimeout(() => { toast.classList.remove('show'); }, 3000);
         }
 
-        // دالة ترتيب المنتجات
         function sortProducts() {
             let sortValue = document.getElementById('sortSelect').value;
             let container = document.getElementById('products-container');
             let cards = Array.from(container.children);
-
             cards.sort((a, b) => {
                 let priceA = parseFloat(a.querySelector('.price').innerText.replace('$', ''));
                 let priceB = parseFloat(b.querySelector('.price').innerText.replace('$', ''));
-
                 if (sortValue === 'low-high') return priceA - priceB;
                 if (sortValue === 'high-low') return priceB - priceA;
                 return 0;
             });
-
             container.innerHTML = '';
             cards.forEach(card => container.appendChild(card));
+        }
+
+        // كود العرض السريع
+        let currentQVProduct = {};
+        function openQuickView(name, price, image, desc) {
+            document.getElementById('qv-image').src = image;
+            document.getElementById('qv-title').innerText = name;
+            document.getElementById('qv-desc').innerText = desc;
+            document.getElementById('qv-price').innerText = '$' + price.toFixed(2);
+            currentQVProduct = { name, price };
+            document.getElementById('quickview-modal').style.display = 'flex';
+        }
+        function addToCartFromQuickView() {
+            // نأخذ المقاس من أول قائمة متاحة في الصفحة كحل سريع (يمكن تطويره لاحقاً)
+            let firstSizeSelect = document.querySelector('.size-select');
+            let size = firstSizeSelect ? firstSizeSelect.value : 'M';
+            if(!size) size = 'M'; // افتراضي
+            
+            let existingItem = cart.find(item => item.name === currentQVProduct.name && item.size === size);
+            if (existingItem) { existingItem.quantity += 1; } else { cart.push({ name: currentQVProduct.name, price: currentQVProduct.price, size: size, quantity: 1 }); }
+            saveCart(); showToast("تمت إضافة " + currentQVProduct.name + " (مقاس " + size + ") للسلة!");
+            closeModal('quickview-modal');
+        }
+
+        // كود سجل الطلبات
+        function showOrderHistory() {
+            let historyDiv = document.getElementById('order-history-items');
+            let orders = JSON.parse(localStorage.getItem('anaqaOrders')) || [];
+            historyDiv.innerHTML = '';
+            
+            if (orders.length === 0) {
+                historyDiv.innerHTML = '<p style="text-align:center; color:#777;">لا توجد طلبات سابقة.</p>';
+            } else {
+                orders.forEach(order => {
+                    let itemsHtml = order.items.map(i => `- ${i.name} (${i.quantity}x)`).join('<br>');
+                    historyDiv.innerHTML += `
+                    <div class="order-card">
+                        <div class="order-header"><span>التاريخ: ${order.date}</span><span>الإجمالي: $${order.total.toFixed(2)}</span></div>
+                        <div class="order-items">${itemsHtml}</div>
+                    </div>`;
+                });
+            }
+            document.getElementById('history-modal').style.display = 'flex';
         }
 
         // كود الحساب
@@ -298,13 +360,9 @@
             authBtn.onclick = function(e) { e.preventDefault(); localStorage.removeItem('loggedInUser'); localStorage.removeItem('userName'); window.location.href = 'login.html'; };
         }
 
-        // كود المؤقت التنازلي
-        let countDownDate = new Date();
-        countDownDate.setHours(23, 59, 59, 0); 
-        
+        let countDownDate = new Date(); countDownDate.setHours(23, 59, 59, 0); 
         let timer = setInterval(function() {
-            let now = new Date().getTime();
-            let distance = countDownDate - now;
+            let now = new Date().getTime(); let distance = countDownDate - now;
             if (distance < 0) { clearInterval(timer); return; }
             let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
@@ -314,7 +372,6 @@
             document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
         }, 1000);
 
-        // كود البحث
         document.getElementById('searchInput').addEventListener('input', function(e) {
             let val = e.target.value.toLowerCase();
             document.querySelectorAll('.product-card').forEach(card => {
@@ -323,13 +380,11 @@
             });
         });
 
-        // كود زر العودة للأعلى
         window.onscroll = function() {
             let btn = document.getElementById("backToTopBtn");
             if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) { btn.style.display = "block"; } else { btn.style.display = "none"; }
         };
 
-        // كود المفضلة
         let wishlist = JSON.parse(localStorage.getItem('anaqaWishlist')) || [];
         function updateWishlistCount() {
             document.getElementById('wishlist-count').innerText = wishlist.length;
@@ -343,15 +398,9 @@
         function toggleWishlist(id, name, price, image) {
             let btn = document.getElementById(id);
             let index = wishlist.findIndex(item => item.id === id);
-            if (index > -1) {
-                wishlist.splice(index, 1); btn.innerText = '🤍'; btn.classList.remove('active');
-                showToast("تمت الإزالة من المفضلة");
-            } else {
-                wishlist.push({ id, name, price, image }); btn.innerText = '❤️'; btn.classList.add('active');
-                showToast("تمت الإضافة إلى المفضلة!");
-            }
-            localStorage.setItem('anaqaWishlist', JSON.stringify(wishlist));
-            updateWishlistCount();
+            if (index > -1) { wishlist.splice(index, 1); btn.innerText = '🤍'; btn.classList.remove('active'); showToast("تمت الإزالة من المفضلة"); } 
+            else { wishlist.push({ id, name, price, image }); btn.innerText = '❤️'; btn.classList.add('active'); showToast("تمت الإضافة إلى المفضلة!"); }
+            localStorage.setItem('anaqaWishlist', JSON.stringify(wishlist)); updateWishlistCount();
         }
 
         function showWishlist() {
@@ -359,14 +408,7 @@
             if (wishlist.length === 0) { itemsDiv.innerHTML = '<p style="text-align:center; color:#777;">قائمة المفضلة فارغة</p>'; } 
             else {
                 wishlist.forEach(item => {
-                    itemsDiv.innerHTML += `
-                    <div class="wishlist-item">
-                        <div style="display:flex; align-items:center; gap:10px;">
-                            <img src="${item.image}" alt="${item.name}">
-                            <span style="font-weight:bold;">${item.name}</span>
-                        </div>
-                        <span style="color:#d65a7a; font-weight:bold;">$${item.price}</span>
-                    </div>`;
+                    itemsDiv.innerHTML += `<div class="wishlist-item"><div style="display:flex; align-items:center; gap:10px;"><img src="${item.image}" alt="${item.name}"><span style="font-weight:bold;">${item.name}</span></div><span style="color:#d65a7a; font-weight:bold;">$${item.price}</span></div>`;
                 });
             }
             document.getElementById('wishlist-modal').style.display = 'flex';
@@ -377,7 +419,6 @@
             window.open("https://wa.me/?text=" + encodeURIComponent(text), '_blank');
         }
 
-        // كود السلة
         const menuIcon = document.getElementById('menu-icon');
         const navLinks = document.getElementById('nav-links');
         menuIcon.addEventListener('click', () => { navLinks.classList.toggle('active'); menuIcon.textContent = navLinks.classList.contains('active') ? '✕' : '☰'; });
@@ -417,18 +458,7 @@
                 cart.forEach((item, index) => {
                     let itemTotal = item.price * item.quantity; total += itemTotal;
                     let sizeText = item.size ? ` (مقاس: ${item.size})` : '';
-                    itemsDiv.innerHTML += `
-                    <div class="cart-item">
-                        <div class="cart-item-header"><span>${item.name}${sizeText}</span><span>$${itemTotal.toFixed(2)}</span></div>
-                        <div class="cart-item-controls">
-                            <div class="qty-controls">
-                                <button class="qty-btn" onclick="updateQty(${index}, -1)">-</button>
-                                <span style="font-weight:bold;">${item.quantity}</span>
-                                <button class="qty-btn" onclick="updateQty(${index}, 1)">+</button>
-                            </div>
-                            <button class="remove-btn" onclick="removeItem(${index})">إزالة ❌</button>
-                        </div>
-                    </div>`;
+                    itemsDiv.innerHTML += `<div class="cart-item"><div class="cart-item-header"><span>${item.name}${sizeText}</span><span>$${itemTotal.toFixed(2)}</span></div><div class="cart-item-controls"><div class="qty-controls"><button class="qty-btn" onclick="updateQty(${index}, -1)">-</button><span style="font-weight:bold;">${item.quantity}</span><button class="qty-btn" onclick="updateQty(${index}, 1)">+</button></div><button class="remove-btn" onclick="removeItem(${index})">إزالة ❌</button></div></div>`;
                 });
                 if (total >= freeShippingThreshold) {
                     document.getElementById('shippingText').innerText = "🎉 مبروك! لقد حصلتِ على شحن مجاني!";
@@ -440,10 +470,7 @@
                 }
                 let discountAmount = total * discountPercent; let finalTotal = total - discountAmount;
                 let totalHtml = `<div class="cart-total">`;
-                if (discountPercent > 0) {
-                    totalHtml += `<div style="font-size:16px; color:#777; text-decoration:line-through;">الإجمالي قبل الخصم: $${total.toFixed(2)}</div>`;
-                    totalHtml += `<div style="color:#25D366;">خصم (${discountPercent * 100}%): -$${discountAmount.toFixed(2)}</div>`;
-                }
+                if (discountPercent > 0) { totalHtml += `<div style="font-size:16px; color:#777; text-decoration:line-through;">الإجمالي قبل الخصم: $${total.toFixed(2)}</div>`; totalHtml += `<div style="color:#25D366;">خصم (${discountPercent * 100}%): -$${discountAmount.toFixed(2)}</div>`; }
                 totalHtml += `الإجمالي النهائي: $${finalTotal.toFixed(2)}</div>`;
                 itemsDiv.innerHTML += totalHtml;
             }
@@ -465,6 +492,7 @@
         function submitOrder() {
             let name = document.getElementById('checkoutName').value; let phone = document.getElementById('checkoutPhone').value; let address = document.getElementById('checkoutAddress').value;
             if (!name || !phone || !address) { showToast("يرجى تعبئة جميع البيانات!"); return; }
+            
             let message = "مرحباً، طلب جديد:\n\n👤 الاسم: " + name + "\n📍 العنوان: " + address + "\n📞 الهاتف: " + phone + "\n\n🛍️ المنتجات:\n";
             let total = 0;
             cart.forEach((item, index) => { 
@@ -476,6 +504,16 @@
             if (discountPercent > 0) { message += "\n💰 الإجمالي: $" + total.toFixed(2); message += "\n🎉 خصم (" + (discountPercent * 100) + "%): -$" + discountAmount.toFixed(2); }
             message += "\n✅ الإجمالي النهائي: $" + finalTotal.toFixed(2);
             if (total >= freeShippingThreshold) { message += "\n🚚 (مؤهل للشحن المجاني!)"; }
+            
+            // حفظ الطلب في السجل
+            let orders = JSON.parse(localStorage.getItem('anaqaOrders')) || [];
+            orders.push({
+                date: new Date().toLocaleDateString('ar-EG'),
+                items: [...cart],
+                total: finalTotal
+            });
+            localStorage.setItem('anaqaOrders', JSON.stringify(orders));
+            
             window.location.href = "https://wa.me/905343283015?text=" + encodeURIComponent(message);
             cart = []; saveCart(); closeModal('checkout-modal');
         }
