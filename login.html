@@ -16,7 +16,7 @@
         .auth-btn:hover { background-color: #b84664; }
         .toggle-btn { background: none; border: none; color: #555; font-weight: bold; cursor: pointer; text-decoration: underline; font-size: 14px; }
         .back-link { display: block; margin-top: 20px; color: #777; text-decoration: none; }
-        .error-msg { color: red; font-size: 14px; margin-bottom: 10px; display: none; }
+        .error-msg { color: red; font-size: 14px; margin-bottom: 10px; display: none; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -24,9 +24,7 @@
         <h2 id="form-title">تسجيل الدخول</h2>
         <p id="error-msg" class="error-msg"></p>
         
-        <!-- خانة الاسم (تظهر فقط عند إنشاء حساب جديد) -->
         <input type="text" id="regName" placeholder="الاسم الكامل" style="display: none;">
-        
         <input type="email" id="email" placeholder="البريد الإلكتروني">
         <input type="password" id="password" placeholder="كلمة المرور">
         
@@ -46,7 +44,6 @@
             document.getElementById('main-btn').innerText = isLoginMode ? 'دخول' : 'إنشاء الحساب';
             document.getElementById('toggle-btn').innerText = isLoginMode ? 'ليس لديك حساب؟ إنشاء حساب جديد' : 'لديك حساب بالفعل؟ تسجيل الدخول';
             document.getElementById('error-msg').style.display = 'none';
-            // إظهار أو إخفاء خانة الاسم حسب الوضع
             document.getElementById('regName').style.display = isLoginMode ? 'none' : 'block';
         }
 
@@ -82,14 +79,34 @@
                     body: JSON.stringify({ email: email, password: password, returnSecureToken: true })
                 });
                 const data = await response.json();
+
                 if (response.ok) {
-                    localStorage.setItem('loggedInUser', email);
-                    // حفظ الاسم في الذاكرة إذا كان وضع إنشاء حساب
                     if (!isLoginMode) {
+                        // --- إنشاء حساب جديد ---
                         localStorage.setItem('userName', name);
+                        
+                        // إرسال إيميل التأكيد
+                        const idToken = data.idToken;
+                        await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${API_KEY}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ requestType: "VERIFY_EMAIL", idToken: idToken })
+                        });
+
+                        alert("تم إنشاء الحساب بنجاح! يرجى تفقد بريدك الإلكتروني والضغط على رابط التأكيد قبل تسجيل الدخول.");
+                        toggleMode(); // العودة لشاشة تسجيل الدخول
+                    } else {
+                        // --- تسجيل دخول ---
+                        if (data.emailVerified === false) {
+                            errorMsg.innerText = "حسابك غير مفعل! يرجى تفقد بريدك الإلكتروني والضغط على رابط التأكيد.";
+                            errorMsg.style.display = 'block';
+                        } else {
+                            // الحساب مفعل، ندخله للمتجر
+                            localStorage.setItem('loggedInUser', email);
+                            alert("تم تسجيل الدخول بنجاح!");
+                            window.location.href = 'shop.html';
+                        }
                     }
-                    alert(isLoginMode ? "تم تسجيل الدخول بنجاح!" : "تم إنشاء الحساب بنجاح!");
-                    window.location.href = 'shop.html';
                 } else {
                     errorMsg.innerText = "خطأ: " + data.error.message;
                     errorMsg.style.display = 'block';
