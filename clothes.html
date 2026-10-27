@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ملابس - لمسة أنثى</title>
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap');
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; scroll-behavior: smooth; }
         body { background-color: #faf6f7; color: #333; padding-bottom: 80px; overflow-x: hidden; }
         
-        /* شريط التخفيضات المتحرك */
         .marquee-bar { background-color: #333; color: #ffc107; padding: 8px 0; overflow: hidden; white-space: nowrap; position: relative; z-index: 1002; font-weight: bold; font-size: 14px; }
         .marquee-text { display: inline-block; animation: marquee 15s linear infinite; }
         @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
@@ -26,11 +26,10 @@
         .login-link { border-top: 1px solid #eee; padding-top: 15px !important; margin-top: 15px !important; color: #d65a7a !important; }
         .welcome-msg { font-size: 16px; color: #d65a7a; font-weight: bold; margin-top: 5px; }
         
-        .search-bar { padding: 10px 15px; border-radius: 20px; border: 1px solid #ddd; font-family: 'Tajawal', sans-serif; outline: none; width: 200px; font-size: 15px; transition: 0.3s; }
-        .search-bar:focus { border-color: #d65a7a; }
+        .search-bar { padding: 10px 15px; border-radius: 20px; border: 1px solid #ddd; font-family: 'Tajawal', sans-serif; outline: none; width: 200px; font-size: 15px; }
 
         .header-icons { display: flex; align-items: center; gap: 15px; }
-        .wishlist-icon { font-size: 24px; cursor: pointer; position: relative; }
+        .wishlist-icon { font-size: 24px; cursor: pointer; position: relative; color: #333; }
         .wishlist-count { position: absolute; top: -5px; right: -10px; background: #d65a7a; color: white; font-size: 12px; border-radius: 50%; padding: 2px 6px; font-weight: bold; }
 
         .countdown-container { background: #333; color: white; text-align: center; padding: 15px; margin: 20px auto; max-width: 600px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
@@ -45,7 +44,7 @@
         .category-section h2 { font-size: 36px; color: #d65a7a; margin-bottom: 20px; }
         
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
-        .product-card { background-color: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.05); position: relative; transition: 0.3s; }
+        .product-card { background-color: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.05); position: relative; }
         
         .badge { position: absolute; top: 15px; left: 15px; padding: 5px 10px; border-radius: 5px; color: white; font-weight: bold; font-size: 12px; z-index: 10; }
         .badge-sale { background-color: #ff4d4d; }
@@ -55,7 +54,7 @@
         .product-card:hover img { transform: scale(1.05); }
         
         .product-actions { position: absolute; top: 15px; right: 15px; display: flex; flex-direction: column; gap: 10px; z-index: 10; }
-        .action-btn { background: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 20px; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center; transition: 0.3s; }
+        .action-btn { background: white; border: none; border-radius: 50%; width: 40px; height: 40px; font-size: 20px; cursor: pointer; box-shadow: 0 2px 10px rgba(0,0,0,0.1); display: flex; justify-content: center; align-items: center; transition: 0.3s; color: #333; }
         .action-btn:hover { transform: scale(1.1); }
         .action-btn.active { color: #ff4d4d; }
 
@@ -106,17 +105,32 @@
 
         #backToTopBtn { display: none; position: fixed; bottom: 90px; right: 20px; z-index: 99; border: none; outline: none; background-color: #d65a7a; color: white; cursor: pointer; padding: 15px; border-radius: 50%; font-size: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: 0.3s; }
         
+        .floating-whatsapp { position: fixed; bottom: 90px; left: 20px; background-color: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 35px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); z-index: 1001; transition: 0.3s; text-decoration: none; }
+        .floating-whatsapp:hover { transform: scale(1.1) rotate(10deg); background-color: #128C7E; }
+
         .wishlist-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 10px 0; }
         .wishlist-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; }
 
-        /* تصميم سجل الطلبات */
-        .order-card { border: 1px solid #ddd; border-radius: 10px; padding: 15px; margin-bottom: 15px; }
-        .order-header { display: flex; justify-content: space-between; font-weight: bold; color: #d65a7a; margin-bottom: 10px; border-bottom: 1px dashed #ddd; padding-bottom: 10px; }
-        .order-items { font-size: 14px; color: #555; line-height: 1.6; }
-        .order-total { text-align: left; font-weight: bold; margin-top: 10px; color: #333; }
+        footer { background-color: #222; color: #ccc; padding: 40px 20px 20px; margin-top: 50px; }
+        .footer-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; text-align: right; }
+        .footer-col h3 { color: #d65a7a; margin-bottom: 15px; font-size: 20px; }
+        .footer-col p, .footer-col a { color: #aaa; text-decoration: none; margin-bottom: 10px; display: block; font-size: 15px; line-height: 1.6; transition: 0.3s; }
+        .footer-col a:hover { color: #d65a7a; padding-right: 5px; }
+        .social-icons { display: flex; gap: 15px; margin-top: 15px; }
+        .social-icons a { font-size: 24px; color: #aaa; transition: 0.3s; }
+        .social-icons a:hover { color: #d65a7a; transform: translateY(-3px); }
+        .footer-bottom { text-align: center; border-top: 1px solid #444; padding-top: 20px; margin-top: 30px; font-size: 14px; }
         
-        footer { background-color: #333; color: #ccc; text-align: center; padding: 30px; margin-top: 50px; }
-        @media (max-width: 768px) { .navbar { padding: 15px 20px; flex-direction: column; gap: 10px; } .nav-links { width: 90%; left: 5%; top: 150px; } .search-bar { width: 100%; } .cart-bar { flex-direction: column; gap: 10px; } .checkout-btn { width: 100%; } .header-icons { margin-top: 10px; } }
+        @media (max-width: 768px) { 
+            .navbar { padding: 15px 20px; flex-direction: column; gap: 10px; } 
+            .nav-links { width: 90%; left: 5%; top: 150px; } 
+            .search-bar { width: 100%; } 
+            .cart-bar { flex-direction: column; gap: 10px; } 
+            .checkout-btn { width: 100%; } 
+            .footer-container { text-align: center; }
+            .social-icons { justify-content: center; }
+            .floating-whatsapp { bottom: 20px; left: 20px; width: 50px; height: 50px; font-size: 28px; }
+        }
     </style>
 </head>
 <body>
@@ -137,9 +151,7 @@
         <input type="text" id="searchInput" class="search-bar" placeholder="ابحثي عن منتج...">
         
         <div class="header-icons">
-            <div class="wishlist-icon" onclick="showWishlist()">
-                ❤️ <span class="wishlist-count" id="wishlist-count">0</span>
-            </div>
+            <div class="wishlist-icon" onclick="showWishlist()">❤️ <span class="wishlist-count" id="wishlist-count">0</span></div>
             <div class="menu-icon" id="menu-icon">☰</div>
         </div>
         
@@ -148,7 +160,6 @@
             <a href="clothes.html" style="color: #d65a7a;">ملابس</a>
             <a href="makeup.html">مكياجات</a>
             <a href="toys.html">ألعاب أطفال</a>
-            <a href="#" onclick="showOrderHistory(); return false;">📦 طلباتي السابقة</a>
             <a href="login.html" class="login-link" id="auth-action-btn">👤 تسجيل الدخول / حسابي</a>
         </div>
     </nav>
@@ -214,7 +225,35 @@
         </div>
     </section>
 
-    <footer><p>© 2024 متجر لمسة أنثى.</p></footer>
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col">
+                <h3>🌸 لمسة أنثى</h3>
+                <p>وجهتك الأولى لكل ما يخص الأناقة والجمال. نقدم لك أجود أنواع الملابس والمكياج وألعاب الأطفال بأفضل الأسعار.</p>
+            </div>
+            <div class="footer-col">
+                <h3>روابط سريعة</h3>
+                <a href="shop.html">الرئيسية</a>
+                <a href="clothes.html">الملابس</a>
+                <a href="makeup.html">المكياج</a>
+                <a href="toys.html">ألعاب الأطفال</a>
+            </div>
+            <div class="footer-col">
+                <h3>تواصل معنا</h3>
+                <p>📞 الهاتف: 0534 328 3015</p>
+                <p>📍 إسطنبول، تركيا</p>
+                <div class="social-icons">
+                    <a href="#" target="_blank"><i class="fab fa-instagram"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-tiktok"></i></a>
+                    <a href="#" target="_blank"><i class="fab fa-facebook"></i></a>
+                    <a href="https://wa.me/905343283015" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 متجر لمسة أنثى. جميع الحقوق محفوظة.</p>
+        </div>
+    </footer>
 
     <div class="cart-bar">
         <div class="cart-info" onclick="showCart()">🛒 عرض السلة <span class="cart-count" id="cart-count">0</span></div>
@@ -222,8 +261,9 @@
     </div>
 
     <button id="backToTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">↑</button>
+    <a href="https://wa.me/905343283015" class="floating-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
-    <!-- نافذة العرض السريع (جديد) -->
+    <!-- نافذة العرض السريع -->
     <div class="modal-overlay" id="quickview-modal">
         <div class="modal-content" style="text-align: center;">
             <span class="close-x" onclick="closeModal('quickview-modal')">&times;</span>
@@ -273,15 +313,6 @@
         </div>
     </div>
 
-    <!-- نافذة سجل الطلبات (جديد) -->
-    <div class="modal-overlay" id="history-modal">
-        <div class="modal-content">
-            <span class="close-x" onclick="closeModal('history-modal')">&times;</span>
-            <h2>📦 سجل طلباتي</h2>
-            <div id="order-history-items"></div>
-        </div>
-    </div>
-
     <div id="toast" class="toast"></div>
 
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
@@ -308,7 +339,6 @@
             cards.forEach(card => container.appendChild(card));
         }
 
-        // كود العرض السريع
         let currentQVProduct = {};
         function openQuickView(name, price, image, desc) {
             document.getElementById('qv-image').src = image;
@@ -319,39 +349,15 @@
             document.getElementById('quickview-modal').style.display = 'flex';
         }
         function addToCartFromQuickView() {
-            // نأخذ المقاس من أول قائمة متاحة في الصفحة كحل سريع (يمكن تطويره لاحقاً)
             let firstSizeSelect = document.querySelector('.size-select');
             let size = firstSizeSelect ? firstSizeSelect.value : 'M';
-            if(!size) size = 'M'; // افتراضي
-            
+            if(!size) size = 'M'; 
             let existingItem = cart.find(item => item.name === currentQVProduct.name && item.size === size);
             if (existingItem) { existingItem.quantity += 1; } else { cart.push({ name: currentQVProduct.name, price: currentQVProduct.price, size: size, quantity: 1 }); }
             saveCart(); showToast("تمت إضافة " + currentQVProduct.name + " (مقاس " + size + ") للسلة!");
             closeModal('quickview-modal');
         }
 
-        // كود سجل الطلبات
-        function showOrderHistory() {
-            let historyDiv = document.getElementById('order-history-items');
-            let orders = JSON.parse(localStorage.getItem('anaqaOrders')) || [];
-            historyDiv.innerHTML = '';
-            
-            if (orders.length === 0) {
-                historyDiv.innerHTML = '<p style="text-align:center; color:#777;">لا توجد طلبات سابقة.</p>';
-            } else {
-                orders.forEach(order => {
-                    let itemsHtml = order.items.map(i => `- ${i.name} (${i.quantity}x)`).join('<br>');
-                    historyDiv.innerHTML += `
-                    <div class="order-card">
-                        <div class="order-header"><span>التاريخ: ${order.date}</span><span>الإجمالي: $${order.total.toFixed(2)}</span></div>
-                        <div class="order-items">${itemsHtml}</div>
-                    </div>`;
-                });
-            }
-            document.getElementById('history-modal').style.display = 'flex';
-        }
-
-        // كود الحساب
         const userName = localStorage.getItem('userName');
         if (userName) { document.getElementById('welcome-msg').innerText = 'أهلاً بك يا ' + userName + ' 🌸'; }
         const authBtn = document.getElementById('auth-action-btn');
@@ -504,15 +510,6 @@
             if (discountPercent > 0) { message += "\n💰 الإجمالي: $" + total.toFixed(2); message += "\n🎉 خصم (" + (discountPercent * 100) + "%): -$" + discountAmount.toFixed(2); }
             message += "\n✅ الإجمالي النهائي: $" + finalTotal.toFixed(2);
             if (total >= freeShippingThreshold) { message += "\n🚚 (مؤهل للشحن المجاني!)"; }
-            
-            // حفظ الطلب في السجل
-            let orders = JSON.parse(localStorage.getItem('anaqaOrders')) || [];
-            orders.push({
-                date: new Date().toLocaleDateString('ar-EG'),
-                items: [...cart],
-                total: finalTotal
-            });
-            localStorage.setItem('anaqaOrders', JSON.stringify(orders));
             
             window.location.href = "https://wa.me/905343283015?text=" + encodeURIComponent(message);
             cart = []; saveCart(); closeModal('checkout-modal');
