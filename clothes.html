@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -110,13 +110,12 @@
         .floating-whatsapp { position: fixed; bottom: 90px; left: 20px; background-color: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 35px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); z-index: 1001; transition: 0.3s; text-decoration: none; }
         .floating-whatsapp:hover { transform: scale(1.1) rotate(10deg); background-color: #128C7E; }
 
-        /* إشعار المبيعات المباشر (جديد) */
+        .wishlist-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 10px 0; }
+        .wishlist-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; }
+
         .social-proof-popup { position: fixed; bottom: 170px; left: 20px; background: #fff; color: #333; padding: 15px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); display: none; z-index: 9998; border-right: 4px solid #25D366; max-width: 280px; font-size: 14px; animation: slideIn 0.5s forwards; }
         .social-proof-popup img { width: 40px; height: 40px; border-radius: 5px; float: right; margin-left: 10px; object-fit: cover;}
         @keyframes slideIn { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-
-        .wishlist-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 10px 0; }
-        .wishlist-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; }
 
         footer { background-color: #222; color: #ccc; padding: 40px 20px 20px; margin-top: 50px; }
         .footer-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; text-align: right; }
@@ -199,7 +198,6 @@
                     <button class="action-btn" id="fav-1" onclick="toggleWishlist('fav-1', 'فستان صيفي أنيق', 45, 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60')">🤍</button>
                     <button class="action-btn" onclick="shareProduct('فستان صيفي أنيق', 45)">📲</button>
                 </div>
-                <!-- إضافة Lazy Loading للصورة -->
                 <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60" alt="فستان" loading="lazy" onclick="openQuickView('فستان صيفي أنيق', 45, 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60', 'فستان صيفي أنيق ومريح، مصنوع من أجود أنواع الأقمشة، مثالي للخروج والمناسبات.')">
                 <div class="product-info">
                     <h3 onclick="openQuickView('فستان صيفي أنيق', 45, 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60', 'فستان صيفي أنيق ومريح، مصنوع من أجود أنواع الأقمشة، مثالي للخروج والمناسبات.')">فستان صيفي أنيق</h3>
@@ -274,7 +272,6 @@
     <button id="backToTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">↑</button>
     <a href="https://wa.me/905343283015" class="floating-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
-    <!-- إشعار المبيعات (جديد) -->
     <div class="social-proof-popup" id="social-proof-popup">
         <img id="sp-image" src="" alt="product">
         <span id="sp-text"></span>
@@ -335,7 +332,6 @@
     <script>
         AOS.init({ once: true, offset: 50 });
 
-        // كود إشعارات المبيعات (جديد)
         const names = ["سارة من إسطنبول", "مريم من أنقرة", "ليلى من إزمير", "نور من بورصة", "هدى من أنطاليا"];
         const boughtProducts = [
             {name: "فستان صيفي أنيق", img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=100&q=60"},
@@ -345,22 +341,14 @@
         function showSocialProof() {
             let randomName = names[Math.floor(Math.random() * names.length)];
             let randomProduct = boughtProducts[Math.floor(Math.random() * boughtProducts.length)];
-            
             document.getElementById('sp-image').src = randomProduct.img;
             document.getElementById('sp-text').innerText = `${randomName} اشترت ${randomProduct.name} للتو! 🎉`;
-            
             let popup = document.getElementById('social-proof-popup');
-            popup.style.display = 'block';
-            popup.style.animation = 'none';
-            popup.offsetHeight; /* trigger reflow */
-            popup.style.animation = 'slideIn 0.5s forwards';
-            
-            setTimeout(() => { popup.style.display = 'none'; }, 6000); // يختفي بعد 6 ثواني
+            popup.style.display = 'block'; popup.style.animation = 'none'; popup.offsetHeight; popup.style.animation = 'slideIn 0.5s forwards';
+            setTimeout(() => { popup.style.display = 'none'; }, 6000);
         }
-
-        // يظهر الإشعار كل 20 ثانية
-        setTimeout(showSocialProof, 5000); // يظهر أول مرة بعد 5 ثواني
-        setInterval(showSocialProof, 20000); // يتكرر كل 20 ثانية
+        setTimeout(showSocialProof, 5000);
+        setInterval(showSocialProof, 20000);
 
         function showToast(message) {
             let toast = document.getElementById('toast'); toast.innerText = message; toast.classList.add('show');
@@ -403,10 +391,11 @@
 
         const userName = localStorage.getItem('userName');
         if (userName) { document.getElementById('welcome-msg').innerText = 'أهلاً بك يا ' + userName + ' 🌸'; }
+        
         const authBtn = document.getElementById('auth-action-btn');
         if (localStorage.getItem('loggedInUser')) {
-            authBtn.innerText = '👤 تسجيل الخروج'; authBtn.href = '#';
-            authBtn.onclick = function(e) { e.preventDefault(); localStorage.removeItem('loggedInUser'); localStorage.removeItem('userName'); window.location.href = 'login.html'; };
+            authBtn.innerText = '👤 حسابي'; 
+            authBtn.href = 'account.html'; 
         }
 
         let countDownDate = new Date(); countDownDate.setHours(23, 59, 59, 0); 
@@ -553,6 +542,11 @@
             if (discountPercent > 0) { message += "\n💰 الإجمالي: $" + total.toFixed(2); message += "\n🎉 خصم (" + (discountPercent * 100) + "%): -$" + discountAmount.toFixed(2); }
             message += "\n✅ الإجمالي النهائي: $" + finalTotal.toFixed(2);
             if (total >= freeShippingThreshold) { message += "\n🚚 (مؤهل للشحن المجاني!)"; }
+            
+            // حفظ الطلب في السجل
+            let orders = JSON.parse(localStorage.getItem('anaqaOrders')) || [];
+            orders.push({ date: new Date().toLocaleDateString('ar-EG'), items: [...cart], total: finalTotal });
+            localStorage.setItem('anaqaOrders', JSON.stringify(orders));
             
             window.location.href = "https://wa.me/905343283015?text=" + encodeURIComponent(message);
             cart = []; saveCart(); closeModal('checkout-modal');
