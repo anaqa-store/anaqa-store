@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -504,3 +504,62 @@
                 document.getElementById('shippingBar').style.width = '0%';
             } else {
                 let total = 0;
+                cart.forEach((item, index) => {
+                    let itemTotal = item.price * item.quantity; total += itemTotal;
+                    itemsDiv.innerHTML += `<div class="cart-item"><div class="cart-item-header"><span>${item.name}</span><span>$${itemTotal.toFixed(2)}</span></div><div class="cart-item-controls"><div class="qty-controls"><button class="qty-btn" onclick="updateQty(${index}, -1)">-</button><span style="font-weight:bold;">${item.quantity}</span><button class="qty-btn" onclick="updateQty(${index}, 1)">+</button></div><button class="remove-btn" onclick="removeItem(${index})">إزالة ❌</button></div></div>`;
+                });
+                if (total >= freeShippingThreshold) {
+                    document.getElementById('shippingText').innerText = "🎉 مبروك! لقد حصلتِ على شحن مجاني!";
+                    document.getElementById('shippingBar').style.width = '100%';
+                } else {
+                    let remaining = freeShippingThreshold - total;
+                    document.getElementById('shippingText').innerText = `أضيفي $${remaining.toFixed(2)} أخرى للحصول على شحن مجاني!`;
+                    document.getElementById('shippingBar').style.width = (total / freeShippingThreshold) * 100 + '%';
+                }
+                let discountAmount = total * discountPercent; let finalTotal = total - discountAmount;
+                let totalHtml = `<div class="cart-total">`;
+                if (discountPercent > 0) { totalHtml += `<div style="font-size:16px; color:#777; text-decoration:line-through;">الإجمالي قبل الخصم: $${total.toFixed(2)}</div>`; totalHtml += `<div style="color:#25D366;">خصم (${discountPercent * 100}%): -$${discountAmount.toFixed(2)}</div>`; }
+                totalHtml += `الإجمالي النهائي: $${finalTotal.toFixed(2)}</div>`;
+                itemsDiv.innerHTML += totalHtml;
+            }
+            document.getElementById('cart-modal').style.display = 'flex';
+        }
+
+        function updateQty(index, change) { cart[index].quantity += change; if (cart[index].quantity <= 0) { cart.splice(index, 1); } saveCart(); showCart(); }
+        function removeItem(index) { cart.splice(index, 1); saveCart(); showCart(); }
+        function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
+
+        function openCheckout() {
+            if (cart.length === 0) { showToast("السلة فارغة!"); return; }
+            document.getElementById('checkoutName').value = localStorage.getItem('userName') || '';
+            document.getElementById('checkoutPhone').value = localStorage.getItem('userPhone') || '';
+            document.getElementById('checkoutAddress').value = '';
+            document.getElementById('checkout-modal').style.display = 'flex';
+        }
+
+        function submitOrder() {
+            let name = document.getElementById('checkoutName').value; let phone = document.getElementById('checkoutPhone').value; let address = document.getElementById('checkoutAddress').value;
+            if (!name || !phone || !address) { showToast("يرجى تعبئة جميع البيانات!"); return; }
+            
+            let message = "مرحباً، طلب جديد:\n\n👤 الاسم: " + name + "\n📍 العنوان: " + address + "\n📞 الهاتف: " + phone + "\n\n🛍️ المنتجات:\n";
+            let total = 0;
+            cart.forEach((item, index) => { 
+                let itemTotal = item.price * item.quantity; 
+                message += (index + 1) + ". " + item.name + " (الكمية: " + item.quantity + ") - $" + itemTotal.toFixed(2) + "\n"; total += itemTotal; 
+            });
+            let discountAmount = total * discountPercent; let finalTotal = total - discountAmount;
+            if (discountPercent > 0) { message += "\n💰 الإجمالي: $" + total.toFixed(2); message += "\n🎉 خصم (" + (discountPercent * 100) + "%): -$" + discountAmount.toFixed(2); }
+            message += "\n✅ الإجمالي النهائي: $" + finalTotal.toFixed(2);
+            if (total >= freeShippingThreshold) { message += "\n🚚 (مؤهل للشحن المجاني!)"; }
+            
+            // حفظ الطلب في السجل
+            let orders = JSON.parse(localStorage.getItem('anaqaOrders')) || [];
+            orders.push({ date: new Date().toLocaleDateString('ar-EG'), items: [...cart], total: finalTotal });
+            localStorage.setItem('anaqaOrders', JSON.stringify(orders));
+            
+            window.location.href = "https://wa.me/905343283015?text=" + encodeURIComponent(message);
+            cart = []; saveCart(); closeModal('checkout-modal');
+        }
+    </script>
+</body>
+</html>
