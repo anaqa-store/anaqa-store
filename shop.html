@@ -1,4 +1,4 @@
-  <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -71,7 +71,8 @@
             <a href="clothes.html">ملابس</a>
             <a href="makeup.html">مكياجات</a>
             <a href="toys.html">ألعاب أطفال</a>
-            <a href="login.html" class="login-link">👤 تسجيل الدخول / حسابي</a>
+            <!-- هذا الزر سيتحول لتسجيل خروج تلقائياً إذا كان المستخدم مسجل -->
+            <a href="login.html" class="login-link" id="auth-action-btn">👤 تسجيل الدخول / حسابي</a>
         </div>
         <div class="menu-icon" id="menu-icon">☰</div>
     </nav>
@@ -115,11 +116,27 @@
     </div>
 
     <script>
+        // 1. عرض اسم المستخدم في الترحيب
         const userName = localStorage.getItem('userName');
         if (userName) {
             document.getElementById('welcome-msg').innerText = 'أهلاً بك يا ' + userName + ' 🌸';
         }
 
+        // 2. تحويل زر "تسجيل الدخول" إلى "تسجيل الخروج" تلقائياً
+        const authBtn = document.getElementById('auth-action-btn');
+        if (localStorage.getItem('loggedInUser')) {
+            authBtn.innerText = '👤 تسجيل الخروج';
+            authBtn.href = '#';
+            authBtn.onclick = function(e) {
+                e.preventDefault(); // منع الانتقال للرابط
+                localStorage.removeItem('loggedInUser'); // مسح الجلسة
+                localStorage.removeItem('userName');     // مسح الاسم
+                alert("تم تسجيل الخروج بنجاح.");
+                window.location.href = 'login.html';     // العودة لصفحة الدخول
+            };
+        }
+
+        // كود القائمة الجانبية
         const menuIcon = document.getElementById('menu-icon');
         const navLinks = document.getElementById('nav-links');
         menuIcon.addEventListener('click', () => {
@@ -127,6 +144,7 @@
             menuIcon.textContent = navLinks.classList.contains('active') ? '✕' : '☰';
         });
 
+        // كود السلة
         let cart = JSON.parse(localStorage.getItem('anaqaCart')) || [];
         function updateCartCount() { document.getElementById('cart-count').innerText = cart.length; }
         updateCartCount();
