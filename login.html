@@ -94,6 +94,7 @@
 
                 if (response.ok) {
                     if (!isLoginMode) {
+                        // --- إنشاء حساب جديد ---
                         localStorage.setItem('userName', name);
                         localStorage.setItem('userPhone', phone);
                         
@@ -107,10 +108,21 @@
                         alert("تم إنشاء الحساب! يرجى تفقد بريدك الإلكتروني والضغط على رابط التأكيد قبل تسجيل الدخول.");
                         toggleMode(); 
                     } else {
+                        // --- تسجيل دخول ---
                         if (data.emailVerified === false) {
-                            errorMsg.innerText = "حسابك غير مفعل! يرجى تفقد بريدك الإلكتروني والضغط على رابط التأكيد.";
+                            // الحساب غير مفعل (ربما حساب قديم أو لم يضغط على الرابط)
+                            // نقوم بإرسال رابط تأكيد جديد تلقائياً
+                            const idToken = data.idToken;
+                            await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${API_KEY}`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ requestType: "VERIFY_EMAIL", idToken: idToken })
+                            });
+
+                            errorMsg.innerText = "حسابك غير مفعل! لقد أرسلنا لك رابط تأكيد جديد على بريدك الإلكتروني، يرجى تفقده والضغط عليه.";
                             errorMsg.style.display = 'block';
                         } else {
+                            // الحساب مفعل، ندخله للمتجر
                             localStorage.setItem('loggedInUser', email);
                             alert("تم تسجيل الدخول بنجاح!");
                             window.location.href = 'shop.html';
