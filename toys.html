@@ -17,6 +17,9 @@
         .login-link { border-top: 1px solid #eee; padding-top: 15px !important; margin-top: 15px !important; color: #d65a7a !important; }
         .welcome-msg { font-size: 16px; color: #d65a7a; font-weight: bold; margin-top: 5px; }
         
+        .search-bar { padding: 10px 15px; border-radius: 20px; border: 1px solid #ddd; font-family: 'Tajawal', sans-serif; outline: none; width: 250px; font-size: 15px; transition: 0.3s; }
+        .search-bar:focus { border-color: #d65a7a; box-shadow: 0 0 5px rgba(214,90,122,0.3); }
+
         .category-section { padding: 60px 20px; text-align: center; }
         .category-section h2 { font-size: 36px; color: #d65a7a; margin-bottom: 40px; }
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
@@ -36,15 +39,30 @@
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center; }
         .modal-content { background: #fff; width: 90%; max-width: 450px; padding: 30px; border-radius: 15px; max-height: 85vh; overflow-y: auto; color: #333; }
         .modal-content h2 { color: #d65a7a; text-align: center; margin-bottom: 20px; }
-        .cart-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #ddd; padding: 10px 0; font-size: 16px; }
-        .remove-btn { background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; }
+        
+        .cart-item { display: flex; flex-direction: column; border-bottom: 1px solid #eee; padding: 15px 0; gap: 10px; }
+        .cart-item-header { display: flex; justify-content: space-between; font-weight: bold; font-size: 16px; }
+        .cart-item-controls { display: flex; justify-content: space-between; align-items: center; }
+        .qty-controls { display: flex; align-items: center; gap: 15px; background: #f0f0f0; padding: 5px 10px; border-radius: 20px; }
+        .qty-btn { background: none; border: none; font-size: 20px; font-weight: bold; color: #d65a7a; cursor: pointer; }
+        .remove-btn { background: #ff4d4d; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; font-size: 12px;}
+        
+        .discount-section { display: flex; gap: 10px; margin-top: 20px; margin-bottom: 10px; }
+        .discount-input { flex: 1; padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-family: 'Tajawal', sans-serif; outline: none; text-transform: uppercase; }
+        .discount-btn { background: #333; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        
+        .cart-total { text-align: left; font-size: 22px; font-weight: bold; margin-top: 10px; color: #d65a7a; }
+
         .checkout-input { width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; outline: none; font-family: 'Tajawal', sans-serif; }
         .checkout-input:focus { border-color: #d65a7a; }
         .confirm-btn { background-color: #25D366; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 18px; cursor: pointer; margin-bottom: 10px; }
         .cancel-btn { background: #ccc; color: #333; border: none; padding: 10px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
+
+        .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background-color: #333; color: white; padding: 15px 30px; border-radius: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 9999; display: none; font-weight: bold; text-align: center; opacity: 0; transition: opacity 0.3s, bottom 0.3s; }
+        .toast.show { display: block; opacity: 1; bottom: 110px; }
         
         footer { background-color: #333; color: #ccc; text-align: center; padding: 30px; margin-top: 50px; }
-        @media (max-width: 768px) { .navbar { padding: 15px 20px; flex-direction: column; gap: 10px; } .nav-links { width: 90%; left: 5%; } .cart-bar { flex-direction: column; gap: 10px; } .checkout-btn { width: 100%; } }
+        @media (max-width: 768px) { .navbar { padding: 15px 20px; flex-direction: column; gap: 10px; } .nav-links { width: 90%; left: 5%; } .search-bar { width: 100%; } .cart-bar { flex-direction: column; gap: 10px; } .checkout-btn { width: 100%; } }
     </style>
 </head>
 <body>
@@ -57,6 +75,8 @@
             <div class="logo">🌸 لمسة أنثى</div>
             <div id="welcome-msg" class="welcome-msg"></div>
         </div>
+        <input type="text" id="searchInput" class="search-bar" placeholder="ابحثي عن منتج...">
+        
         <div class="nav-links" id="nav-links">
             <a href="shop.html">الرئيسية</a>
             <a href="clothes.html">ملابس</a>
@@ -69,7 +89,7 @@
 
     <section class="category-section">
         <h2>🧸 قسم ألعاب الأطفال</h2>
-        <div class="products-grid">
+        <div class="products-grid" id="products-container">
             <div class="product-card">
                 <img src="https://images.unsplash.com/photo-1558060370-d644479cb6f7?auto=format&fit=crop&w=500&q=60" alt="دبدوب">
                 <div class="product-info">
@@ -100,7 +120,11 @@
         <div class="modal-content">
             <h2>سلة المشتريات</h2>
             <div id="cart-items"></div>
-            <button class="cancel-btn" style="margin-top: 20px;" onclick="closeModal('cart-modal')">إغلاق</button>
+            <div class="discount-section">
+                <input type="text" id="discountCode" class="discount-input" placeholder="كود الخصم (مثال: BASEL10)">
+                <button class="discount-btn" onclick="applyDiscount()">تطبيق</button>
+            </div>
+            <button class="cancel-btn" style="margin-top: 10px;" onclick="closeModal('cart-modal')">إغلاق</button>
         </div>
     </div>
 
@@ -115,7 +139,14 @@
         </div>
     </div>
 
+    <div id="toast" class="toast"></div>
+
     <script>
+        function showToast(message) {
+            let toast = document.getElementById('toast'); toast.innerText = message; toast.classList.add('show');
+            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+        }
+
         const userName = localStorage.getItem('userName');
         if (userName) { document.getElementById('welcome-msg').innerText = 'أهلاً بك يا ' + userName + ' 🌸'; }
         const authBtn = document.getElementById('auth-action-btn');
@@ -124,36 +155,77 @@
             authBtn.onclick = function(e) { e.preventDefault(); localStorage.removeItem('loggedInUser'); localStorage.removeItem('userName'); window.location.href = 'login.html'; };
         }
 
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            let val = e.target.value.toLowerCase();
+            document.querySelectorAll('.product-card').forEach(card => {
+                let title = card.querySelector('h3').innerText.toLowerCase();
+                card.style.display = title.includes(val) ? 'block' : 'none';
+            });
+        });
+
         const menuIcon = document.getElementById('menu-icon');
         const navLinks = document.getElementById('nav-links');
         menuIcon.addEventListener('click', () => { navLinks.classList.toggle('active'); menuIcon.textContent = navLinks.classList.contains('active') ? '✕' : '☰'; });
 
         let cart = JSON.parse(localStorage.getItem('anaqaCart')) || [];
-        function updateCartCount() { document.getElementById('cart-count').innerText = cart.length; }
+        cart = cart.map(item => ({ ...item, quantity: item.quantity || 1 }));
+        let discountPercent = 0;
+
+        function saveCart() { localStorage.setItem('anaqaCart', JSON.stringify(cart)); updateCartCount(); }
+        function updateCartCount() { let totalQty = cart.reduce((sum, item) => sum + item.quantity, 0); document.getElementById('cart-count').innerText = totalQty; }
         updateCartCount();
 
         function addToCart(name, price) {
-            cart.push({ name: name, price: price });
-            localStorage.setItem('anaqaCart', JSON.stringify(cart));
-            updateCartCount();
-            alert("تمت إضافة " + name + " للسلة!");
+            let existingItem = cart.find(item => item.name === name);
+            if (existingItem) { existingItem.quantity += 1; } else { cart.push({ name: name, price: price, quantity: 1 }); }
+            saveCart(); showToast("تمت إضافة " + name + " للسلة!");
+        }
+
+        function applyDiscount() {
+            let code = document.getElementById('discountCode').value.toUpperCase();
+            if (code === 'BASEL10') { discountPercent = 0.10; showToast("تم تطبيق خصم 10%! 🎉"); showCart(); } 
+            else if (code === '') { showToast("الرجاء إدخال كود الخصم."); } 
+            else { showToast("كود الخصم غير صحيح."); }
         }
 
         function showCart() {
             let itemsDiv = document.getElementById('cart-items'); itemsDiv.innerHTML = '';
-            if (cart.length === 0) { itemsDiv.innerHTML = '<p style="text-align:center;">السلة فارغة</p>'; } else {
+            if (cart.length === 0) { itemsDiv.innerHTML = '<p style="text-align:center; color: #777;">السلة فارغة حالياً</p>'; } 
+            else {
+                let total = 0;
                 cart.forEach((item, index) => {
-                    itemsDiv.innerHTML += `<div class="cart-item"><span>${item.name}</span><span>$${item.price} <button class="remove-btn" onclick="removeItem(${index})">❌</button></span></div>`;
+                    let itemTotal = item.price * item.quantity; total += itemTotal;
+                    itemsDiv.innerHTML += `
+                    <div class="cart-item">
+                        <div class="cart-item-header"><span>${item.name}</span><span>$${itemTotal.toFixed(2)}</span></div>
+                        <div class="cart-item-controls">
+                            <div class="qty-controls">
+                                <button class="qty-btn" onclick="updateQty(${index}, -1)">-</button>
+                                <span style="font-weight:bold;">${item.quantity}</span>
+                                <button class="qty-btn" onclick="updateQty(${index}, 1)">+</button>
+                            </div>
+                            <button class="remove-btn" onclick="removeItem(${index})">إزالة ❌</button>
+                        </div>
+                    </div>`;
                 });
+                let discountAmount = total * discountPercent; let finalTotal = total - discountAmount;
+                let totalHtml = `<div class="cart-total">`;
+                if (discountPercent > 0) {
+                    totalHtml += `<div style="font-size:16px; color:#777; text-decoration:line-through;">الإجمالي قبل الخصم: $${total.toFixed(2)}</div>`;
+                    totalHtml += `<div style="color:#25D366;">خصم (${discountPercent * 100}%): -$${discountAmount.toFixed(2)}</div>`;
+                }
+                totalHtml += `الإجمالي النهائي: $${finalTotal.toFixed(2)}</div>`;
+                itemsDiv.innerHTML += totalHtml;
             }
             document.getElementById('cart-modal').style.display = 'flex';
         }
 
-        function removeItem(index) { cart.splice(index, 1); localStorage.setItem('anaqaCart', JSON.stringify(cart)); updateCartCount(); showCart(); }
+        function updateQty(index, change) { cart[index].quantity += change; if (cart[index].quantity <= 0) { cart.splice(index, 1); } saveCart(); showCart(); }
+        function removeItem(index) { cart.splice(index, 1); saveCart(); showCart(); }
         function closeModal(modalId) { document.getElementById(modalId).style.display = 'none'; }
 
         function openCheckout() {
-            if (cart.length === 0) { alert("السلة فارغة! أضيفي بعض المنتجات أولاً."); return; }
+            if (cart.length === 0) { showToast("السلة فارغة!"); return; }
             document.getElementById('checkoutName').value = localStorage.getItem('userName') || '';
             document.getElementById('checkoutPhone').value = localStorage.getItem('userPhone') || '';
             document.getElementById('checkoutAddress').value = '';
@@ -161,18 +233,16 @@
         }
 
         function submitOrder() {
-            let name = document.getElementById('checkoutName').value;
-            let phone = document.getElementById('checkoutPhone').value;
-            let address = document.getElementById('checkoutAddress').value;
-
-            if (!name || !phone || !address) { alert("يرجى تعبئة جميع البيانات!"); return; }
-
+            let name = document.getElementById('checkoutName').value; let phone = document.getElementById('checkoutPhone').value; let address = document.getElementById('checkoutAddress').value;
+            if (!name || !phone || !address) { showToast("يرجى تعبئة جميع البيانات!"); return; }
             let message = "مرحباً، طلب جديد:\n\n👤 الاسم: " + name + "\n📍 العنوان: " + address + "\n📞 الهاتف: " + phone + "\n\n🛍️ المنتجات:\n";
             let total = 0;
-            cart.forEach((item, index) => { message += (index + 1) + ". " + item.name + " - $" + item.price + "\n"; total += item.price; });
-            message += "\n💰 الإجمالي: $" + total;
+            cart.forEach((item, index) => { let itemTotal = item.price * item.quantity; message += (index + 1) + ". " + item.name + " (الكمية: " + item.quantity + ") - $" + itemTotal.toFixed(2) + "\n"; total += itemTotal; });
+            let discountAmount = total * discountPercent; let finalTotal = total - discountAmount;
+            if (discountPercent > 0) { message += "\n💰 الإجمالي: $" + total.toFixed(2); message += "\n🎉 خصم (" + (discountPercent * 100) + "%): -$" + discountAmount.toFixed(2); }
+            message += "\n✅ الإجمالي النهائي: $" + finalTotal.toFixed(2);
             window.location.href = "https://wa.me/905343283015?text=" + encodeURIComponent(message);
-            localStorage.removeItem('anaqaCart'); cart = []; updateCartCount(); closeModal('checkout-modal');
+            cart = []; saveCart(); closeModal('checkout-modal');
         }
     </script>
 </body>
