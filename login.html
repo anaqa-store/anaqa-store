@@ -14,7 +14,8 @@
         .auth-box input:focus { border-color: #d65a7a; }
         .auth-btn { background-color: #d65a7a; color: white; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 18px; cursor: pointer; transition: 0.3s; margin-bottom: 10px; }
         .auth-btn:hover { background-color: #b84664; }
-        .toggle-btn { background: none; border: none; color: #555; font-weight: bold; cursor: pointer; text-decoration: underline; font-size: 14px; }
+        .toggle-btn { background: none; border: none; color: #555; font-weight: bold; cursor: pointer; text-decoration: underline; font-size: 14px; margin-top: 5px; }
+        .forgot-btn { background: none; border: none; color: #d65a7a; cursor: pointer; font-size: 13px; margin-bottom: 15px; text-decoration: underline; }
         .back-link { display: block; margin-top: 20px; color: #777; text-decoration: none; }
         .error-msg { color: red; font-size: 14px; margin-bottom: 10px; display: none; font-weight: bold; }
     </style>
@@ -24,11 +25,18 @@
         <h2 id="form-title">تسجيل الدخول</h2>
         <p id="error-msg" class="error-msg"></p>
         
+        <!-- حقول إنشاء الحساب -->
         <input type="text" id="regName" placeholder="الاسم الكامل" style="display: none;">
+        <input type="tel" id="regPhone" placeholder="رقم الهاتف" style="display: none;">
+        
         <input type="email" id="email" placeholder="البريد الإلكتروني">
         <input type="password" id="password" placeholder="كلمة المرور">
         
         <button class="auth-btn" id="main-btn" onclick="handleAuth()">دخول</button>
+        
+        <!-- زر نسيت كلمة المرور -->
+        <button class="forgot-btn" id="forgot-btn" onclick="forgotPassword()">نسيت كلمة المرور؟</button>
+        
         <button class="toggle-btn" id="toggle-btn" onclick="toggleMode()">ليس لديك حساب؟ إنشاء حساب جديد</button>
         
         <a href="shop.html" class="back-link">العودة للمتجر</a>
@@ -44,13 +52,17 @@
             document.getElementById('main-btn').innerText = isLoginMode ? 'دخول' : 'إنشاء الحساب';
             document.getElementById('toggle-btn').innerText = isLoginMode ? 'ليس لديك حساب؟ إنشاء حساب جديد' : 'لديك حساب بالفعل؟ تسجيل الدخول';
             document.getElementById('error-msg').style.display = 'none';
+            
             document.getElementById('regName').style.display = isLoginMode ? 'none' : 'block';
+            document.getElementById('regPhone').style.display = isLoginMode ? 'none' : 'block';
+            document.getElementById('forgot-btn').style.display = isLoginMode ? 'block' : 'none';
         }
 
         async function handleAuth() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const name = document.getElementById('regName').value;
+            const phone = document.getElementById('regPhone').value;
             const errorMsg = document.getElementById('error-msg');
             
             if (!email || !password) {
@@ -59,8 +71,8 @@
                 return;
             }
 
-            if (!isLoginMode && !name) {
-                errorMsg.innerText = "يرجى إدخال الاسم الكامل";
+            if (!isLoginMode && (!name || !phone)) {
+                errorMsg.innerText = "يرجى إدخال الاسم ورقم الهاتف";
                 errorMsg.style.display = 'block';
                 return;
             }
@@ -82,10 +94,9 @@
 
                 if (response.ok) {
                     if (!isLoginMode) {
-                        // --- إنشاء حساب جديد ---
                         localStorage.setItem('userName', name);
+                        localStorage.setItem('userPhone', phone);
                         
-                        // إرسال إيميل التأكيد
                         const idToken = data.idToken;
                         await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${API_KEY}`, {
                             method: 'POST',
@@ -93,15 +104,13 @@
                             body: JSON.stringify({ requestType: "VERIFY_EMAIL", idToken: idToken })
                         });
 
-                        alert("تم إنشاء الحساب بنجاح! يرجى تفقد بريدك الإلكتروني والضغط على رابط التأكيد قبل تسجيل الدخول.");
-                        toggleMode(); // العودة لشاشة تسجيل الدخول
+                        alert("تم إنشاء الحساب! يرجى تفقد بريدك الإلكتروني والضغط على رابط التأكيد قبل تسجيل الدخول.");
+                        toggleMode(); 
                     } else {
-                        // --- تسجيل دخول ---
                         if (data.emailVerified === false) {
                             errorMsg.innerText = "حسابك غير مفعل! يرجى تفقد بريدك الإلكتروني والضغط على رابط التأكيد.";
                             errorMsg.style.display = 'block';
                         } else {
-                            // الحساب مفعل، ندخله للمتجر
                             localStorage.setItem('loggedInUser', email);
                             alert("تم تسجيل الدخول بنجاح!");
                             window.location.href = 'shop.html';
@@ -116,6 +125,31 @@
                 errorMsg.style.display = 'block';
             } finally {
                 document.getElementById('main-btn').innerText = isLoginMode ? 'دخول' : 'إنشاء الحساب';
+            }
+        }
+
+        async function forgotPassword() {
+            const email = document.getElementById('email').value;
+            if (!email) {
+                alert("يرجى كتابة بريدك الإلكتروني في الخانة أولاً، ثم اضغط على 'نسيت كلمة المرور'.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=${API_KEY}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ requestType: "PASSWORD_RESET", email: email })
+                });
+                
+                if (response.ok) {
+                    alert("تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني.");
+                } else {
+                    const data = await response.json();
+                    alert("خطأ: " + data.error.message);
+                }
+            } catch (error) {
+                alert("حدث خطأ في الشبكة. تأكد من اتصالك بالإنترنت.");
             }
         }
     </script>
