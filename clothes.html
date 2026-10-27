@@ -1,4 +1,4 @@
- <!DOCTYPE html>
+  <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -63,7 +63,9 @@
         .rating { color: #ffc107; font-size: 14px; margin-bottom: 10px; }
         .rating span { color: #777; font-size: 12px; margin-right: 5px; }
 
-        .product-info .price { color: #d65a7a; font-size: 22px; font-weight: bold; margin-bottom: 15px; display: block; }
+        .product-info .price { color: #d65a7a; font-size: 22px; font-weight: bold; margin-bottom: 5px; display: block; }
+        .low-stock { color: #ff4d4d; font-size: 13px; font-weight: bold; margin-bottom: 10px; display: block; }
+        
         .size-select { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: 'Tajawal', sans-serif; font-size: 16px; }
         .add-to-cart { background-color: #f0e6e8; color: #d65a7a; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px; transition: 0.3s; }
         .add-to-cart:hover { background-color: #d65a7a; color: white; }
@@ -108,6 +110,11 @@
         .floating-whatsapp { position: fixed; bottom: 90px; left: 20px; background-color: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 35px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); z-index: 1001; transition: 0.3s; text-decoration: none; }
         .floating-whatsapp:hover { transform: scale(1.1) rotate(10deg); background-color: #128C7E; }
 
+        /* إشعار المبيعات المباشر (جديد) */
+        .social-proof-popup { position: fixed; bottom: 170px; left: 20px; background: #fff; color: #333; padding: 15px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); display: none; z-index: 9998; border-right: 4px solid #25D366; max-width: 280px; font-size: 14px; animation: slideIn 0.5s forwards; }
+        .social-proof-popup img { width: 40px; height: 40px; border-radius: 5px; float: right; margin-left: 10px; object-fit: cover;}
+        @keyframes slideIn { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
         .wishlist-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 10px 0; }
         .wishlist-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; }
 
@@ -130,6 +137,7 @@
             .footer-container { text-align: center; }
             .social-icons { justify-content: center; }
             .floating-whatsapp { bottom: 20px; left: 20px; width: 50px; height: 50px; font-size: 28px; }
+            .social-proof-popup { bottom: 80px; max-width: 200px; font-size: 12px;}
         }
     </style>
 </head>
@@ -191,11 +199,13 @@
                     <button class="action-btn" id="fav-1" onclick="toggleWishlist('fav-1', 'فستان صيفي أنيق', 45, 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60')">🤍</button>
                     <button class="action-btn" onclick="shareProduct('فستان صيفي أنيق', 45)">📲</button>
                 </div>
-                <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60" alt="فستان" onclick="openQuickView('فستان صيفي أنيق', 45, 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60', 'فستان صيفي أنيق ومريح، مصنوع من أجود أنواع الأقمشة، مثالي للخروج والمناسبات.')">
+                <!-- إضافة Lazy Loading للصورة -->
+                <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60" alt="فستان" loading="lazy" onclick="openQuickView('فستان صيفي أنيق', 45, 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60', 'فستان صيفي أنيق ومريح، مصنوع من أجود أنواع الأقمشة، مثالي للخروج والمناسبات.')">
                 <div class="product-info">
                     <h3 onclick="openQuickView('فستان صيفي أنيق', 45, 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60', 'فستان صيفي أنيق ومريح، مصنوع من أجود أنواع الأقمشة، مثالي للخروج والمناسبات.')">فستان صيفي أنيق</h3>
                     <div class="rating">⭐⭐⭐⭐⭐ <span>(4.8)</span></div>
                     <span class="price">$45.00</span>
+                    <span class="low-stock">🔥 بقي 3 فقط في المخزون!</span>
                     <select id="size-1" class="size-select">
                         <option value="">اختر المقاس...</option>
                         <option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option>
@@ -210,11 +220,12 @@
                     <button class="action-btn" id="fav-2" onclick="toggleWishlist('fav-2', 'بلوزة كاجوال', 20, 'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=500&q=60')">🤍</button>
                     <button class="action-btn" onclick="shareProduct('بلوزة كاجوال', 20)">📲</button>
                 </div>
-                <img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=500&q=60" alt="بلوزة" onclick="openQuickView('بلوزة كاجوال', 20, 'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=500&q=60', 'بلوزة كاجوال ناعمة ومريحة، مناسبة للاستخدام اليومي.')">
+                <img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=500&q=60" alt="بلوزة" loading="lazy" onclick="openQuickView('بلوزة كاجوال', 20, 'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=500&q=60', 'بلوزة كاجوال ناعمة ومريحة، مناسبة للاستخدام اليومي.')">
                 <div class="product-info">
                     <h3 onclick="openQuickView('بلوزة كاجوال', 20, 'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=500&q=60', 'بلوزة كاجوال ناعمة ومريحة، مناسبة للاستخدام اليومي.')">بلوزة كاجوال</h3>
                     <div class="rating">⭐⭐⭐⭐ <span>(4.2)</span></div>
                     <span class="price">$20.00</span>
+                    <span class="low-stock">🔥 بقي 5 فقط في المخزون!</span>
                     <select id="size-2" class="size-select">
                         <option value="">اختر المقاس...</option>
                         <option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option>
@@ -263,7 +274,12 @@
     <button id="backToTopBtn" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">↑</button>
     <a href="https://wa.me/905343283015" class="floating-whatsapp" target="_blank"><i class="fab fa-whatsapp"></i></a>
 
-    <!-- نافذة العرض السريع -->
+    <!-- إشعار المبيعات (جديد) -->
+    <div class="social-proof-popup" id="social-proof-popup">
+        <img id="sp-image" src="" alt="product">
+        <span id="sp-text"></span>
+    </div>
+
     <div class="modal-overlay" id="quickview-modal">
         <div class="modal-content" style="text-align: center;">
             <span class="close-x" onclick="closeModal('quickview-modal')">&times;</span>
@@ -318,6 +334,33 @@
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({ once: true, offset: 50 });
+
+        // كود إشعارات المبيعات (جديد)
+        const names = ["سارة من إسطنبول", "مريم من أنقرة", "ليلى من إزمير", "نور من بورصة", "هدى من أنطاليا"];
+        const boughtProducts = [
+            {name: "فستان صيفي أنيق", img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=100&q=60"},
+            {name: "بلوزة كاجوال", img: "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=100&q=60"}
+        ];
+
+        function showSocialProof() {
+            let randomName = names[Math.floor(Math.random() * names.length)];
+            let randomProduct = boughtProducts[Math.floor(Math.random() * boughtProducts.length)];
+            
+            document.getElementById('sp-image').src = randomProduct.img;
+            document.getElementById('sp-text').innerText = `${randomName} اشترت ${randomProduct.name} للتو! 🎉`;
+            
+            let popup = document.getElementById('social-proof-popup');
+            popup.style.display = 'block';
+            popup.style.animation = 'none';
+            popup.offsetHeight; /* trigger reflow */
+            popup.style.animation = 'slideIn 0.5s forwards';
+            
+            setTimeout(() => { popup.style.display = 'none'; }, 6000); // يختفي بعد 6 ثواني
+        }
+
+        // يظهر الإشعار كل 20 ثانية
+        setTimeout(showSocialProof, 5000); // يظهر أول مرة بعد 5 ثواني
+        setInterval(showSocialProof, 20000); // يتكرر كل 20 ثانية
 
         function showToast(message) {
             let toast = document.getElementById('toast'); toast.innerText = message; toast.classList.add('show');
