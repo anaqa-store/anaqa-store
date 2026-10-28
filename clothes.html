@@ -114,7 +114,6 @@
         .related-card img { width: 100%; height: 100px; object-fit: cover; border-radius: 8px; }
         .related-card span { font-size: 12px; color: #d65a7a; font-weight: bold; display: block; margin-top: 5px; }
 
-        /* تنسيقات التقييمات وزر اسأل البائع */
         .ask-seller-btn { background: #fff; color: #d65a7a; border: 2px solid #d65a7a; padding: 10px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; margin-bottom: 15px; transition: 0.3s; }
         .ask-seller-btn:hover { background: #d65a7a; color: #fff; }
         
@@ -391,7 +390,7 @@
                 </div>
             </div>
 
-            <!-- قسم التقييمات (بدون صور) -->
+            <!-- قسم التقييمات -->
             <div class="reviews-section">
                 <h4>⭐ آراء وتجارب العملاء:</h4>
                 <div id="reviews-list"></div>
@@ -467,7 +466,6 @@
     <script>
         AOS.init({ once: true, offset: 50 });
 
-        // المتغيرات الخاصة بالتقييمات
         let currentRating = 0;
         let currentProductName = "";
 
@@ -475,11 +473,8 @@
             currentRating = rating;
             let stars = document.getElementById('star-input').children;
             for (let i = 0; i < stars.length; i++) {
-                if (i < rating) {
-                    stars[i].classList.add('selected');
-                } else {
-                    stars[i].classList.remove('selected');
-                }
+                if (i < rating) { stars[i].classList.add('selected'); } 
+                else { stars[i].classList.remove('selected'); }
             }
         }
 
@@ -488,20 +483,23 @@
             window.open(`https://wa.me/905343283015?text=${encodeURIComponent(msg)}`, '_blank');
         }
 
-        // دالة عرض التقييمات
         function loadReviews(productName) {
             let reviewsList = document.getElementById('reviews-list');
             reviewsList.innerHTML = '';
-            let allReviews = JSON.parse(localStorage.getItem('anaqaReviews')) || {};
+            
+            let allReviews = {};
+            try {
+                allReviews = JSON.parse(localStorage.getItem('anaqaReviews')) || {};
+                if (typeof allReviews !== 'object' || Array.isArray(allReviews)) allReviews = {};
+            } catch (e) { allReviews = {}; }
+
             let productReviews = allReviews[productName] || [];
 
             if (productReviews.length === 0) {
                 reviewsList.innerHTML = '<p style="font-size: 14px; color: #777; text-align: center;">لا توجد تقييمات لهذا المنتج بعد. كوني أول من يقيّم!</p>';
             } else {
-                // استخدام slice().reverse() لحماية المصفوفة الأصلية
                 productReviews.slice().reverse().forEach(rev => {
                     let starsHtml = '★'.repeat(rev.rating) + '☆'.repeat(5 - rev.rating);
-                    
                     reviewsList.innerHTML += `
                         <div class="review-item">
                             <div class="rev-header">
@@ -515,41 +513,46 @@
             }
         }
 
-        // دالة حفظ التقييم
         function submitReview() {
             let name = document.getElementById('reviewName').value.trim();
             let text = document.getElementById('reviewText').value.trim();
 
-            if (!name || !text || currentRating === 0) {
-                showToast("يرجى إدخال الاسم، التقييم بالنجوم، والرأي.");
+            // التعديل السحري: إذا لم يضغط على النجوم، نعطيه 5 نجوم تلقائياً
+            if (currentRating === 0) { currentRating = 5; }
+
+            if (!name || !text) {
+                showToast("يرجى إدخال الاسم والرأي.");
                 return;
             }
 
-            // جلب التقييمات القديمة
-            let allReviews = JSON.parse(localStorage.getItem('anaqaReviews')) || {};
+            let allReviews = {};
+            try {
+                allReviews = JSON.parse(localStorage.getItem('anaqaReviews')) || {};
+                if (typeof allReviews !== 'object' || Array.isArray(allReviews)) allReviews = {};
+            } catch (e) { allReviews = {}; }
+
             if (!allReviews[currentProductName]) allReviews[currentProductName] = [];
             
-            // إضافة التقييم الجديد
             allReviews[currentProductName].push({
                 name: name,
                 text: text,
                 rating: currentRating
             });
 
-            // الحفظ في المتصفح
-            localStorage.setItem('anaqaReviews', JSON.stringify(allReviews));
-            
-            // رسالة النجاح
-            showToast("تم إضافة تقييمك بنجاح! شكراً لك.");
-            
-            // إعادة تعيين الحقول
-            document.getElementById('reviewName').value = '';
-            document.getElementById('reviewText').value = '';
-            setRating(0);
-            currentRating = 0;
-            
-            // تحديث القائمة فوراً لتظهر التقييمات
-            loadReviews(currentProductName); 
+            try {
+                localStorage.setItem('anaqaReviews', JSON.stringify(allReviews));
+                showToast("تم إضافة تقييمك بنجاح! شكراً لك.");
+                
+                document.getElementById('reviewName').value = '';
+                document.getElementById('reviewText').value = '';
+                setRating(0);
+                currentRating = 0;
+                
+                loadReviews(currentProductName); 
+            } catch (error) {
+                showToast("حدث خطأ في الحفظ، يرجى مسح بيانات المتصفح والمحاولة مجدداً.");
+                console.error(error);
+            }
         }
 
         function toggleFaq(element) {
@@ -618,7 +621,7 @@
 
         let currentQVProduct = {};
         function openQuickView(name, price, images, desc) {
-            currentProductName = name; // لتستخدم في زر "اسأل البائع" والتقييمات
+            currentProductName = name;
             document.getElementById('qv-title').innerText = name;
             document.getElementById('qv-desc').innerText = desc || 'منتج رائع من متجر لمسة أنثى.';
             document.getElementById('qv-price').innerText = '$' + price.toFixed(2);
@@ -649,7 +652,7 @@
                 relatedGrid.innerHTML = `<div class="related-card" onclick="openQuickView('بلوزة كاجوال', 20, ['https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=500&q=60'], '')"><img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=100&q=60"><span>بلوزة كاجوال</span></div>`;
             } else { relatedDiv.style.display = 'none'; }
 
-            loadReviews(name); // تحميل التقييمات لهذا المنتج
+            loadReviews(name);
             document.getElementById('quickview-modal').style.display = 'flex';
             
             if(!recentViewed.some(item => item.name === name)) {
