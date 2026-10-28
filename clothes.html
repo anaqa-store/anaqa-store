@@ -75,7 +75,6 @@
         
         .no-results { display: none; width: 100%; text-align: center; color: #777; font-size: 20px; margin-top: 50px; grid-column: 1 / -1; }
 
-        /* قسم شوهدت مؤخراً */
         .recent-section { padding: 40px 20px; background: #fff; text-align: center; margin-top: 40px; }
         .recent-section h3 { color: #d65a7a; margin-bottom: 20px; font-size: 24px; }
         .recent-grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
@@ -84,6 +83,16 @@
         .recent-item img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
         .recent-item h4 { font-size: 14px; color: #333; margin-bottom: 5px; }
         .recent-item span { color: #d65a7a; font-weight: bold; }
+
+        /* قسم الأسئلة الشائعة */
+        .faq-section { padding: 40px 20px; max-width: 800px; margin: 0 auto; }
+        .faq-section h2 { text-align: center; color: #d65a7a; margin-bottom: 30px; font-size: 28px; }
+        .faq-item { background: #fff; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); overflow: hidden; }
+        .faq-question { padding: 20px; font-weight: bold; cursor: pointer; display: flex; justify-content: space-between; align-items: center; color: #333; transition: 0.3s; }
+        .faq-question:hover { color: #d65a7a; }
+        .faq-answer { padding: 0 20px 20px; color: #666; display: none; line-height: 1.6; }
+        .faq-question i { transition: 0.3s; }
+        .faq-question.active i { transform: rotate(180deg); }
 
         .cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #fff; box-shadow: 0 -2px 15px rgba(0,0,0,0.1); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
         .cart-info { font-weight: bold; font-size: 18px; color: #333; display: flex; align-items: center; gap: 10px; cursor: pointer; }
@@ -94,6 +103,19 @@
         .modal-content { background: #fff; width: 90%; max-width: 450px; padding: 30px; border-radius: 15px; max-height: 85vh; overflow-y: auto; color: #333; position: relative; }
         .modal-content h2 { color: #d65a7a; text-align: center; margin-bottom: 20px; }
         .close-x { position: absolute; top: 10px; left: 15px; font-size: 24px; cursor: pointer; color: #777; }
+
+        /* معرض الصور في العرض السريع */
+        .qv-thumbnails { display: flex; justify-content: center; gap: 10px; margin-bottom: 20px; }
+        .qv-thumb { width: 60px; height: 60px; object-fit: cover; border-radius: 8px; cursor: pointer; border: 2px solid transparent; transition: 0.3s; }
+        .qv-thumb.active { border-color: #d65a7a; }
+
+        /* منتجات مقترحة في العرض السريع */
+        .related-products { margin-top: 20px; border-top: 1px solid #eee; padding-top: 15px; }
+        .related-products h4 { color: #333; margin-bottom: 10px; text-align: right; }
+        .related-grid { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; }
+        .related-card { min-width: 100px; cursor: pointer; text-align: center; }
+        .related-card img { width: 100%; height: 100px; object-fit: cover; border-radius: 8px; }
+        .related-card span { font-size: 12px; color: #d65a7a; font-weight: bold; display: block; margin-top: 5px; }
 
         .cart-item { display: flex; flex-direction: column; border-bottom: 1px solid #eee; padding: 15px 0; gap: 10px; }
         .cart-item-header { display: flex; justify-content: space-between; font-weight: bold; font-size: 16px; }
@@ -117,7 +139,6 @@
         .confirm-btn { background-color: #25D366; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 18px; cursor: pointer; margin-bottom: 10px; }
         .cancel-btn { background: #ccc; color: #333; border: none; padding: 10px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
 
-        /* جدول المقاسات */
         .size-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         .size-table th, .size-table td { border: 1px solid #ddd; padding: 10px; text-align: center; }
         .size-table th { background: #f0e6e8; color: #d65a7a; }
@@ -162,9 +183,7 @@
     </style>
 </head>
 <body>
-    <!-- مكتبة الاحتفال بالقصاصات -->
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
     <script>
         if (!localStorage.getItem('loggedInUser')) { window.location.href = 'login.html'; }
     </script>
@@ -228,9 +247,9 @@
                     <button class="action-btn" id="fav-1" onclick="toggleWishlist('fav-1', 'فستان صيفي أنيق', 45, 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60')">🤍</button>
                     <button class="action-btn" onclick="shareProduct('فستان صيفي أنيق', 45)">📲</button>
                 </div>
-                <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60" alt="فستان" loading="lazy" onclick="openQuickView('فستان صيفي أنيق', 45, 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60', 'فستان صيفي أنيق ومريح، مصنوع من أجود أنواع الأقمشة، مثالي للخروج والمناسبات.')">
+                <img src="https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60" alt="فستان" loading="lazy" onclick="openQuickView('فستان صيفي أنيق', 45, ['https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60', 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=500&q=60', 'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?auto=format&fit=crop&w=500&q=60'], 'فستان صيفي أنيق ومريح، مصنوع من أجود أنواع الأقمشة، مثالي للخروج والمناسبات.')">
                 <div class="product-info">
-                    <h3 onclick="openQuickView('فستان صيفي أنيق', 45, 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60', 'فستان صيفي أنيق ومريح، مصنوع من أجود أنواع الأقمشة، مثالي للخروج والمناسبات.')">فستان صيفي أنيق</h3>
+                    <h3 onclick="openQuickView('فستان صيفي أنيق', 45, ['https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60', 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?auto=format&fit=crop&w=500&q=60', 'https://images.unsplash.com/photo-1585487000160-6ebcfceb0d03?auto=format&fit=crop&w=500&q=60'], 'فستان صيفي أنيق ومريح، مصنوع من أجود أنواع الأقمشة، مثالي للخروج والمناسبات.')">فستان صيفي أنيق</h3>
                     <div class="rating">⭐⭐⭐⭐⭐ <span>(4.8)</span></div>
                     <span class="price">$45.00</span>
                     <span class="low-stock">🔥 بقي 3 فقط في المخزون!</span>
@@ -251,9 +270,9 @@
                     <button class="action-btn" id="fav-2" onclick="toggleWishlist('fav-2', 'بلوزة كاجوال', 20, 'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=500&q=60')">🤍</button>
                     <button class="action-btn" onclick="shareProduct('بلوزة كاجوال', 20)">📲</button>
                 </div>
-                <img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=500&q=60" alt="بلوزة" loading="lazy" onclick="openQuickView('بلوزة كاجوال', 20, 'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=500&q=60', 'بلوزة كاجوال ناعمة ومريحة، مناسبة للاستخدام اليومي.')">
+                <img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=500&q=60" alt="بلوزة" loading="lazy" onclick="openQuickView('بلوزة كاجوال', 20, ['https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=500&q=60', 'https://images.unsplash.com/photo-1564257631407-4deb1f99d992?auto=format&fit=crop&w=500&q=60'], 'بلوزة كاجوال ناعمة ومريحة، مناسبة للاستخدام اليومي.')">
                 <div class="product-info">
-                    <h3 onclick="openQuickView('بلوزة كاجوال', 20, 'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=500&q=60', 'بلوزة كاجوال ناعمة ومريحة، مناسبة للاستخدام اليومي.')">بلوزة كاجوال</h3>
+                    <h3 onclick="openQuickView('بلوزة كاجوال', 20, ['https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=500&q=60', 'https://images.unsplash.com/photo-1564257631407-4deb1f99d992?auto=format&fit=crop&w=500&q=60'], 'بلوزة كاجوال ناعمة ومريحة، مناسبة للاستخدام اليومي.')">بلوزة كاجوال</h3>
                     <div class="rating">⭐⭐⭐⭐ <span>(4.2)</span></div>
                     <span class="price">$20.00</span>
                     <span class="low-stock">🔥 بقي 5 فقط في المخزون!</span>
@@ -272,7 +291,23 @@
         </div>
     </section>
 
-    <!-- قسم المنتجات التي شوهدت مؤخراً -->
+    <!-- الأسئلة الشائعة (جديد) -->
+    <section class="faq-section">
+        <h2>❓ الأسئلة الشائعة</h2>
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">كم يستغرق الشحن؟ <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">يستغرق الشحن داخل إسطنبول من 1 إلى 2 أيام عمل، وباقي المدن من 2 إلى 4 أيام عمل.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">هل يمكنني استرجاع المنتج؟ <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">نعم، يمكنك استرجاع المنتج خلال 14 يوماً من تاريخ الاستلام بشرط أن يكون بحالته الأصلية.</div>
+        </div>
+        <div class="faq-item">
+            <div class="faq-question" onclick="toggleFaq(this)">هل الدفع عند الاستلام متاح؟ <i class="fas fa-chevron-down"></i></div>
+            <div class="faq-answer">نعم، الدفع عند الاستلام متاح لجميع الطلبات داخل تركيا.</div>
+        </div>
+    </section>
+
     <section class="recent-section" id="recent-section" style="display: none;">
         <h3>👁️ شوهدت مؤخراً</h3>
         <div class="recent-grid" id="recent-grid"></div>
@@ -321,15 +356,26 @@
         <span id="sp-text"></span>
     </div>
 
+    <!-- نافذة العرض السريع المحدثة -->
     <div class="modal-overlay" id="quickview-modal">
         <div class="modal-content" style="text-align: center;">
             <span class="close-x" onclick="closeModal('quickview-modal')">&times;</span>
-            <img id="qv-image" src="" alt="Product" style="width: 100%; height: 250px; object-fit: cover; border-radius: 10px; margin-bottom: 15px;">
+            <img id="qv-image" src="" alt="Product" style="width: 100%; height: 250px; object-fit: cover; border-radius: 10px; margin-bottom: 10px;">
+            
+            <!-- صور مصغرة (جديد) -->
+            <div class="qv-thumbnails" id="qv-thumbnails"></div>
+
             <h2 id="qv-title" style="margin-bottom: 10px;"></h2>
             <div class="rating" style="font-size: 18px; margin-bottom: 10px;">⭐⭐⭐⭐⭐</div>
             <p id="qv-desc" style="color: #777; margin-bottom: 20px; line-height: 1.6;"></p>
             <h3 id="qv-price" style="color: #d65a7a; font-size: 24px; margin-bottom: 20px;"></h3>
             <button class="confirm-btn" onclick="addToCartFromQuickView()">أضيفي إلى السلة 🛒</button>
+
+            <!-- منتجات مقترحة (جديد) -->
+            <div class="related-products" id="related-products" style="display: none;">
+                <h4>✨ قد يعجبك أيضاً:</h4>
+                <div class="related-grid" id="related-grid"></div>
+            </div>
         </div>
     </div>
 
@@ -339,14 +385,7 @@
             <h2>📏 دليل المقاسات</h2>
             <p style="text-align: center; color: #777; margin-bottom: 15px;">جميع القياسات بالسنتيمتر (سم)</p>
             <table class="size-table">
-                <thead>
-                    <tr>
-                        <th>المقاس</th>
-                        <th>الصدر</th>
-                        <th>الوسط</th>
-                        <th>الطول</th>
-                    </tr>
-                </thead>
+                <thead><tr><th>المقاس</th><th>الصدر</th><th>الوسط</th><th>الطول</th></tr></thead>
                 <tbody>
                     <tr><td>S</td><td>86 - 90</td><td>66 - 70</td><td>65</td></tr>
                     <tr><td>M</td><td>90 - 94</td><td>70 - 74</td><td>66</td></tr>
@@ -400,6 +439,17 @@
     <script>
         AOS.init({ once: true, offset: 50 });
 
+        // كود الأسئلة الشائعة
+        function toggleFaq(element) {
+            element.classList.toggle('active');
+            let answer = element.nextElementSibling;
+            if (answer.style.display === 'block') {
+                answer.style.display = 'none';
+            } else {
+                answer.style.display = 'block';
+            }
+        }
+
         const names = ["سارة من إسطنبول", "مريم من أنقرة", "ليلى من إزمير", "نور من بورصة", "هدى من أنطاليا"];
         const boughtProducts = [
             {name: "فستان صيفي أنيق", img: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=100&q=60"},
@@ -439,12 +489,7 @@
                 if (priceValue === '20to50' && (price < 20 || price > 50)) show = false;
                 if (priceValue === 'over50' && price <= 50) show = false;
 
-                if (show) {
-                    card.style.display = 'block';
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
-                }
+                if (show) { card.style.display = 'block'; visibleCount++; } else { card.style.display = 'none'; }
             });
 
             if (visibleCount === 0) { noResults.style.display = 'block'; } else { noResults.style.display = 'none'; }
@@ -463,21 +508,50 @@
             container.appendChild(noResults);
         }
 
-        // كود المنتجات التي شوهدت مؤخراً
         let recentViewed = JSON.parse(localStorage.getItem('anaqaRecent')) || [];
 
-        function openQuickView(name, price, image, desc) {
-            document.getElementById('qv-image').src = image;
+        // دالة العرض السريع المحدثة (صور متعددة + منتجات مقترحة)
+        let currentQVProduct = {};
+        function openQuickView(name, price, images, desc) {
             document.getElementById('qv-title').innerText = name;
-            document.getElementById('qv-desc').innerText = desc;
+            document.getElementById('qv-desc').innerText = desc || 'منتج رائع من متجر لمسة أنثى.';
             document.getElementById('qv-price').innerText = '$' + price.toFixed(2);
             currentQVProduct = { name, price };
+            
+            // إعداد الصورة الرئيسية والصور المصغرة
+            let mainImg = document.getElementById('qv-image');
+            let thumbContainer = document.getElementById('qv-thumbnails');
+            mainImg.src = images[0];
+            thumbContainer.innerHTML = '';
+            
+            images.forEach((img, index) => {
+                let thumb = document.createElement('img');
+                thumb.src = img;
+                thumb.className = 'qv-thumb' + (index === 0 ? ' active' : '');
+                thumb.onclick = function() {
+                    mainImg.src = img;
+                    document.querySelectorAll('.qv-thumb').forEach(t => t.classList.remove('active'));
+                    thumb.classList.add('active');
+                };
+                thumbContainer.appendChild(thumb);
+            });
+
+            // إضافة منتجات مقترحة
+            let relatedDiv = document.getElementById('related-products');
+            let relatedGrid = document.getElementById('related-grid');
+            relatedGrid.innerHTML = '';
+            if(name.includes('فستان')) {
+                relatedDiv.style.display = 'block';
+                relatedGrid.innerHTML = `<div class="related-card" onclick="openQuickView('بلوزة كاجوال', 20, ['https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=500&q=60'], '')"><img src="https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=100&q=60"><span>بلوزة كاجوال</span></div>`;
+            } else {
+                relatedDiv.style.display = 'none';
+            }
+
             document.getElementById('quickview-modal').style.display = 'flex';
             
-            // إضافة المنتج لشوهدت مؤخراً
             if(!recentViewed.some(item => item.name === name)) {
-                recentViewed.unshift({name, price, image});
-                if(recentViewed.length > 4) recentViewed.pop(); // نحتفظ بآخر 4 فقط
+                recentViewed.unshift({name, price, image: images[0]});
+                if(recentViewed.length > 4) recentViewed.pop();
                 localStorage.setItem('anaqaRecent', JSON.stringify(recentViewed));
                 displayRecentViewed();
             }
@@ -486,27 +560,15 @@
         function displayRecentViewed() {
             let grid = document.getElementById('recent-grid');
             let section = document.getElementById('recent-section');
-            
-            if (recentViewed.length === 0) {
-                section.style.display = 'none';
-                return;
-            }
-            
+            if (recentViewed.length === 0) { section.style.display = 'none'; return; }
             section.style.display = 'block';
             grid.innerHTML = '';
-            
             recentViewed.forEach(item => {
-                grid.innerHTML += `
-                <div class="recent-item" onclick="openQuickView('${item.name}', ${item.price}, '${item.image}', '')">
-                    <img src="${item.image}" alt="${item.name}">
-                    <h4>${item.name}</h4>
-                    <span>$${item.price.toFixed(2)}</span>
-                </div>`;
+                grid.innerHTML += `<div class="recent-item" onclick="openQuickView('${item.name}', ${item.price}, ['${item.image}'], '')"><img src="${item.image}" alt="${item.name}"><h4>${item.name}</h4><span>$${item.price.toFixed(2)}</span></div>`;
             });
         }
-        displayRecentViewed(); // عرض المنتجات التي شوهدت عند فتح الصفحة
+        displayRecentViewed();
 
-        let currentQVProduct = {};
         function addToCartFromQuickView() {
             let firstSizeSelect = document.querySelector('.size-select');
             let size = firstSizeSelect ? firstSizeSelect.value : 'M';
@@ -546,12 +608,7 @@
 
             cards.forEach(card => {
                 let title = card.querySelector('h3').innerText.toLowerCase();
-                if (title.includes(val)) {
-                    card.style.display = 'block';
-                    visibleCount++;
-                } else {
-                    card.style.display = 'none';
-                }
+                if (title.includes(val)) { card.style.display = 'block'; visibleCount++; } else { card.style.display = 'none'; }
             });
 
             if (visibleCount === 0) { noResults.style.display = 'block'; } else { noResults.style.display = 'none'; }
@@ -565,10 +622,7 @@
         let wishlist = JSON.parse(localStorage.getItem('anaqaWishlist')) || [];
         function updateWishlistCount() {
             document.getElementById('wishlist-count').innerText = wishlist.length;
-            wishlist.forEach(item => {
-                let btn = document.getElementById(item.id);
-                if(btn) { btn.innerText = '❤️'; btn.classList.add('active'); }
-            });
+            wishlist.forEach(item => { let btn = document.getElementById(item.id); if(btn) { btn.innerText = '❤️'; btn.classList.add('active'); } });
         }
         updateWishlistCount();
 
@@ -600,9 +654,7 @@
         const navLinks = document.getElementById('nav-links');
         menuIcon.addEventListener('click', () => { navLinks.classList.toggle('active'); menuIcon.textContent = navLinks.classList.contains('active') ? '✕' : '☰'; });
 
-        function openSizeGuide() {
-            document.getElementById('size-guide-modal').style.display = 'flex';
-        }
+        function openSizeGuide() { document.getElementById('size-guide-modal').style.display = 'flex'; }
 
         let cart = JSON.parse(localStorage.getItem('anaqaCart')) || [];
         cart = cart.map(item => ({ ...item, quantity: item.quantity || 1 }));
@@ -686,23 +738,19 @@
             message += "\n✅ الإجمالي النهائي: $" + finalTotal.toFixed(2);
             if (total >= freeShippingThreshold) { message += "\n🚚 (مؤهل للشحن المجاني!)"; }
             
-            // حفظ الطلب في السجل
             let orders = JSON.parse(localStorage.getItem('anaqaOrders')) || [];
             orders.push({ date: new Date().toLocaleDateString('ar-EG'), items: [...cart], total: finalTotal });
             localStorage.setItem('anaqaOrders', JSON.stringify(orders));
 
-            // 🎉 إطلاق الاحتفال (Confetti)
             confetti({
-                particleCount: 150,
-                spread: 70,
-                origin: { y: 0.6 },
+                particleCount: 150, spread: 70, origin: { y: 0.6 },
                 colors: ['#d65a7a', '#25D366', '#ffc107', '#ffffff']
             });
             
             setTimeout(() => {
                 window.location.href = "https://wa.me/905343283015?text=" + encodeURIComponent(message);
                 cart = []; saveCart(); closeModal('checkout-modal');
-            }, 1500); // تأخير بسيط عشان يرى العميل الاحتفال
+            }, 1500);
         }
     </script>
 </body>
