@@ -37,7 +37,6 @@
         .countdown-timer { display: flex; justify-content: center; gap: 15px; font-size: 24px; font-weight: bold; color: #ffc107; }
         .time-box { background: #444; padding: 5px 15px; border-radius: 5px; }
 
-        /* قسم الفلاتر الجديد */
         .filter-section { text-align: center; margin-bottom: 30px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
         .filter-select { padding: 10px 20px; border-radius: 20px; border: 1px solid #d65a7a; font-family: 'Tajawal', sans-serif; font-size: 16px; outline: none; background: white; color: #d65a7a; font-weight: bold; cursor: pointer; }
 
@@ -67,12 +66,24 @@
         .product-info .price { color: #d65a7a; font-size: 22px; font-weight: bold; margin-bottom: 5px; display: block; }
         .low-stock { color: #ff4d4d; font-size: 13px; font-weight: bold; margin-bottom: 10px; display: block; }
         
-        .size-select { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: 'Tajawal', sans-serif; font-size: 16px; }
+        .size-row { display: flex; gap: 10px; margin-bottom: 10px; align-items: center; }
+        .size-select { flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #ccc; font-family: 'Tajawal', sans-serif; font-size: 16px; }
+        .size-guide-btn { background: #f0e6e8; color: #d65a7a; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; white-space: nowrap; }
+
         .add-to-cart { background-color: #f0e6e8; color: #d65a7a; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px; transition: 0.3s; }
         .add-to-cart:hover { background-color: #d65a7a; color: white; }
         
-        /* رسالة عدم وجود نتائج */
         .no-results { display: none; width: 100%; text-align: center; color: #777; font-size: 20px; margin-top: 50px; grid-column: 1 / -1; }
+
+        /* قسم شوهدت مؤخراً */
+        .recent-section { padding: 40px 20px; background: #fff; text-align: center; margin-top: 40px; }
+        .recent-section h3 { color: #d65a7a; margin-bottom: 20px; font-size: 24px; }
+        .recent-grid { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
+        .recent-item { background: #faf6f7; padding: 10px; border-radius: 10px; width: 150px; cursor: pointer; transition: 0.3s; }
+        .recent-item:hover { transform: translateY(-5px); }
+        .recent-item img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
+        .recent-item h4 { font-size: 14px; color: #333; margin-bottom: 5px; }
+        .recent-item span { color: #d65a7a; font-weight: bold; }
 
         .cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #fff; box-shadow: 0 -2px 15px rgba(0,0,0,0.1); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
         .cart-info { font-weight: bold; font-size: 18px; color: #333; display: flex; align-items: center; gap: 10px; cursor: pointer; }
@@ -106,13 +117,19 @@
         .confirm-btn { background-color: #25D366; color: white; border: none; padding: 15px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 18px; cursor: pointer; margin-bottom: 10px; }
         .cancel-btn { background: #ccc; color: #333; border: none; padding: 10px; width: 100%; border-radius: 8px; cursor: pointer; font-weight: bold; }
 
+        /* جدول المقاسات */
+        .size-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .size-table th, .size-table td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+        .size-table th { background: #f0e6e8; color: #d65a7a; }
+
         .toast { position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%); background-color: #333; color: white; padding: 15px 30px; border-radius: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.3); z-index: 9999; display: none; font-weight: bold; text-align: center; opacity: 0; transition: opacity 0.3s, bottom 0.3s; }
         .toast.show { display: block; opacity: 1; bottom: 110px; }
 
         #backToTopBtn { display: none; position: fixed; bottom: 90px; right: 20px; z-index: 99; border: none; outline: none; background-color: #d65a7a; color: white; cursor: pointer; padding: 15px; border-radius: 50%; font-size: 18px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: 0.3s; }
         
-        .floating-whatsapp { position: fixed; bottom: 90px; left: 20px; background-color: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 35px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); z-index: 1001; transition: 0.3s; text-decoration: none; }
+        .floating-whatsapp { position: fixed; bottom: 90px; left: 20px; background-color: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 35px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); z-index: 1001; transition: 0.3s; text-decoration: none; animation: pulse 2s infinite; }
         .floating-whatsapp:hover { transform: scale(1.1) rotate(10deg); background-color: #128C7E; }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); } 70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); } }
 
         .social-proof-popup { position: fixed; bottom: 170px; left: 20px; background: #fff; color: #333; padding: 15px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); display: none; z-index: 9998; border-right: 4px solid #25D366; max-width: 280px; font-size: 14px; animation: slideIn 0.5s forwards; }
         .social-proof-popup img { width: 40px; height: 40px; border-radius: 5px; float: right; margin-left: 10px; object-fit: cover;}
@@ -145,6 +162,9 @@
     </style>
 </head>
 <body>
+    <!-- مكتبة الاحتفال بالقصاصات -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
     <script>
         if (!localStorage.getItem('loggedInUser')) { window.location.href = 'login.html'; }
     </script>
@@ -187,7 +207,6 @@
     <section class="category-section">
         <h2>👗 قسم الملابس</h2>
         
-        <!-- الفلاتر الجديدة -->
         <div class="filter-section">
             <select id="sortSelect" class="filter-select" onchange="applyFilters()">
                 <option value="default">ترتيب افتراضي</option>
@@ -215,10 +234,13 @@
                     <div class="rating">⭐⭐⭐⭐⭐ <span>(4.8)</span></div>
                     <span class="price">$45.00</span>
                     <span class="low-stock">🔥 بقي 3 فقط في المخزون!</span>
-                    <select id="size-1" class="size-select">
-                        <option value="">اختر المقاس...</option>
-                        <option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option>
-                    </select>
+                    <div class="size-row">
+                        <select id="size-1" class="size-select">
+                            <option value="">اختر المقاس...</option>
+                            <option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option>
+                        </select>
+                        <button class="size-guide-btn" onclick="openSizeGuide()">دليل المقاسات</button>
+                    </div>
                     <button class="add-to-cart" onclick="addToCart('فستان صيفي أنيق', 45, 'size-1')">أضيفي إلى السلة 🛒</button>
                 </div>
             </div>
@@ -235,17 +257,25 @@
                     <div class="rating">⭐⭐⭐⭐ <span>(4.2)</span></div>
                     <span class="price">$20.00</span>
                     <span class="low-stock">🔥 بقي 5 فقط في المخزون!</span>
-                    <select id="size-2" class="size-select">
-                        <option value="">اختر المقاس...</option>
-                        <option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option>
-                    </select>
+                    <div class="size-row">
+                        <select id="size-2" class="size-select">
+                            <option value="">اختر المقاس...</option>
+                            <option value="S">S</option><option value="M">M</option><option value="L">L</option><option value="XL">XL</option>
+                        </select>
+                        <button class="size-guide-btn" onclick="openSizeGuide()">دليل المقاسات</button>
+                    </div>
                     <button class="add-to-cart" onclick="addToCart('بلوزة كاجوال', 20, 'size-2')">أضيفي إلى السلة 🛒</button>
                 </div>
             </div>
             
-            <!-- رسالة عدم وجود نتائج -->
             <div class="no-results" id="noResults">عذراً، لم نجد منتجات تطابق بحثك أو الفلتر المحدد. 😔</div>
         </div>
+    </section>
+
+    <!-- قسم المنتجات التي شوهدت مؤخراً -->
+    <section class="recent-section" id="recent-section" style="display: none;">
+        <h3>👁️ شوهدت مؤخراً</h3>
+        <div class="recent-grid" id="recent-grid"></div>
     </section>
 
     <footer>
@@ -300,6 +330,30 @@
             <p id="qv-desc" style="color: #777; margin-bottom: 20px; line-height: 1.6;"></p>
             <h3 id="qv-price" style="color: #d65a7a; font-size: 24px; margin-bottom: 20px;"></h3>
             <button class="confirm-btn" onclick="addToCartFromQuickView()">أضيفي إلى السلة 🛒</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="size-guide-modal">
+        <div class="modal-content">
+            <span class="close-x" onclick="closeModal('size-guide-modal')">&times;</span>
+            <h2>📏 دليل المقاسات</h2>
+            <p style="text-align: center; color: #777; margin-bottom: 15px;">جميع القياسات بالسنتيمتر (سم)</p>
+            <table class="size-table">
+                <thead>
+                    <tr>
+                        <th>المقاس</th>
+                        <th>الصدر</th>
+                        <th>الوسط</th>
+                        <th>الطول</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>S</td><td>86 - 90</td><td>66 - 70</td><td>65</td></tr>
+                    <tr><td>M</td><td>90 - 94</td><td>70 - 74</td><td>66</td></tr>
+                    <tr><td>L</td><td>94 - 98</td><td>74 - 78</td><td>67</td></tr>
+                    <tr><td>XL</td><td>98 - 102</td><td>78 - 82</td><td>68</td></tr>
+                </tbody>
+            </table>
         </div>
     </div>
 
@@ -369,7 +423,6 @@
             setTimeout(() => { toast.classList.remove('show'); }, 3000);
         }
 
-        // كود الفلترة والترتيب الجديد
         function applyFilters() {
             let sortValue = document.getElementById('sortSelect').value;
             let priceValue = document.getElementById('priceFilter').value;
@@ -382,7 +435,6 @@
                 let price = parseFloat(card.getAttribute('data-price'));
                 let show = true;
 
-                // فلترة السعر
                 if (priceValue === 'under20' && price >= 20) show = false;
                 if (priceValue === '20to50' && (price < 20 || price > 50)) show = false;
                 if (priceValue === 'over50' && price <= 50) show = false;
@@ -395,14 +447,8 @@
                 }
             });
 
-            // إظهار رسالة عدم وجود نتائج
-            if (visibleCount === 0) {
-                noResults.style.display = 'block';
-            } else {
-                noResults.style.display = 'none';
-            }
+            if (visibleCount === 0) { noResults.style.display = 'block'; } else { noResults.style.display = 'none'; }
 
-            // ترتيب المنتجات
             let visibleCards = cards.filter(card => card.style.display !== 'none');
             visibleCards.sort((a, b) => {
                 let priceA = parseFloat(a.getAttribute('data-price'));
@@ -417,7 +463,9 @@
             container.appendChild(noResults);
         }
 
-        let currentQVProduct = {};
+        // كود المنتجات التي شوهدت مؤخراً
+        let recentViewed = JSON.parse(localStorage.getItem('anaqaRecent')) || [];
+
         function openQuickView(name, price, image, desc) {
             document.getElementById('qv-image').src = image;
             document.getElementById('qv-title').innerText = name;
@@ -425,7 +473,40 @@
             document.getElementById('qv-price').innerText = '$' + price.toFixed(2);
             currentQVProduct = { name, price };
             document.getElementById('quickview-modal').style.display = 'flex';
+            
+            // إضافة المنتج لشوهدت مؤخراً
+            if(!recentViewed.some(item => item.name === name)) {
+                recentViewed.unshift({name, price, image});
+                if(recentViewed.length > 4) recentViewed.pop(); // نحتفظ بآخر 4 فقط
+                localStorage.setItem('anaqaRecent', JSON.stringify(recentViewed));
+                displayRecentViewed();
+            }
         }
+
+        function displayRecentViewed() {
+            let grid = document.getElementById('recent-grid');
+            let section = document.getElementById('recent-section');
+            
+            if (recentViewed.length === 0) {
+                section.style.display = 'none';
+                return;
+            }
+            
+            section.style.display = 'block';
+            grid.innerHTML = '';
+            
+            recentViewed.forEach(item => {
+                grid.innerHTML += `
+                <div class="recent-item" onclick="openQuickView('${item.name}', ${item.price}, '${item.image}', '')">
+                    <img src="${item.image}" alt="${item.name}">
+                    <h4>${item.name}</h4>
+                    <span>$${item.price.toFixed(2)}</span>
+                </div>`;
+            });
+        }
+        displayRecentViewed(); // عرض المنتجات التي شوهدت عند فتح الصفحة
+
+        let currentQVProduct = {};
         function addToCartFromQuickView() {
             let firstSizeSelect = document.querySelector('.size-select');
             let size = firstSizeSelect ? firstSizeSelect.value : 'M';
@@ -457,7 +538,6 @@
             document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
         }, 1000);
 
-        // كود البحث المحدث
         document.getElementById('searchInput').addEventListener('input', function(e) {
             let val = e.target.value.toLowerCase();
             let cards = document.querySelectorAll('.product-card');
@@ -474,11 +554,7 @@
                 }
             });
 
-            if (visibleCount === 0) {
-                noResults.style.display = 'block';
-            } else {
-                noResults.style.display = 'none';
-            }
+            if (visibleCount === 0) { noResults.style.display = 'block'; } else { noResults.style.display = 'none'; }
         });
 
         window.onscroll = function() {
@@ -523,6 +599,10 @@
         const menuIcon = document.getElementById('menu-icon');
         const navLinks = document.getElementById('nav-links');
         menuIcon.addEventListener('click', () => { navLinks.classList.toggle('active'); menuIcon.textContent = navLinks.classList.contains('active') ? '✕' : '☰'; });
+
+        function openSizeGuide() {
+            document.getElementById('size-guide-modal').style.display = 'flex';
+        }
 
         let cart = JSON.parse(localStorage.getItem('anaqaCart')) || [];
         cart = cart.map(item => ({ ...item, quantity: item.quantity || 1 }));
@@ -610,9 +690,19 @@
             let orders = JSON.parse(localStorage.getItem('anaqaOrders')) || [];
             orders.push({ date: new Date().toLocaleDateString('ar-EG'), items: [...cart], total: finalTotal });
             localStorage.setItem('anaqaOrders', JSON.stringify(orders));
+
+            // 🎉 إطلاق الاحتفال (Confetti)
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#d65a7a', '#25D366', '#ffc107', '#ffffff']
+            });
             
-            window.location.href = "https://wa.me/905343283015?text=" + encodeURIComponent(message);
-            cart = []; saveCart(); closeModal('checkout-modal');
+            setTimeout(() => {
+                window.location.href = "https://wa.me/905343283015?text=" + encodeURIComponent(message);
+                cart = []; saveCart(); closeModal('checkout-modal');
+            }, 1500); // تأخير بسيط عشان يرى العميل الاحتفال
         }
     </script>
 </body>
