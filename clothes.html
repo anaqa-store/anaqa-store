@@ -37,13 +37,14 @@
         .countdown-timer { display: flex; justify-content: center; gap: 15px; font-size: 24px; font-weight: bold; color: #ffc107; }
         .time-box { background: #444; padding: 5px 15px; border-radius: 5px; }
 
-        .filter-section { text-align: center; margin-bottom: 20px; }
-        .sort-select { padding: 10px 20px; border-radius: 20px; border: 1px solid #d65a7a; font-family: 'Tajawal', sans-serif; font-size: 16px; outline: none; background: white; color: #d65a7a; font-weight: bold; cursor: pointer; }
+        /* قسم الفلاتر الجديد */
+        .filter-section { text-align: center; margin-bottom: 30px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .filter-select { padding: 10px 20px; border-radius: 20px; border: 1px solid #d65a7a; font-family: 'Tajawal', sans-serif; font-size: 16px; outline: none; background: white; color: #d65a7a; font-weight: bold; cursor: pointer; }
 
         .category-section { padding: 20px 20px 60px; text-align: center; }
         .category-section h2 { font-size: 36px; color: #d65a7a; margin-bottom: 20px; }
         
-        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; max-width: 1200px; margin: 0 auto; min-height: 300px; }
         .product-card { background-color: #fff; border-radius: 15px; overflow: hidden; box-shadow: 0 5px 20px rgba(0,0,0,0.05); position: relative; }
         
         .badge { position: absolute; top: 15px; left: 15px; padding: 5px 10px; border-radius: 5px; color: white; font-weight: bold; font-size: 12px; z-index: 10; }
@@ -70,6 +71,9 @@
         .add-to-cart { background-color: #f0e6e8; color: #d65a7a; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; width: 100%; font-size: 16px; transition: 0.3s; }
         .add-to-cart:hover { background-color: #d65a7a; color: white; }
         
+        /* رسالة عدم وجود نتائج */
+        .no-results { display: none; width: 100%; text-align: center; color: #777; font-size: 20px; margin-top: 50px; grid-column: 1 / -1; }
+
         .cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background-color: #fff; box-shadow: 0 -2px 15px rgba(0,0,0,0.1); padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; z-index: 1000; }
         .cart-info { font-weight: bold; font-size: 18px; color: #333; display: flex; align-items: center; gap: 10px; cursor: pointer; }
         .cart-count { background-color: #d65a7a; color: white; border-radius: 50%; padding: 2px 8px; font-size: 14px; }
@@ -110,12 +114,12 @@
         .floating-whatsapp { position: fixed; bottom: 90px; left: 20px; background-color: #25D366; color: white; width: 60px; height: 60px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 35px; box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4); z-index: 1001; transition: 0.3s; text-decoration: none; }
         .floating-whatsapp:hover { transform: scale(1.1) rotate(10deg); background-color: #128C7E; }
 
-        .wishlist-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 10px 0; }
-        .wishlist-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; }
-
         .social-proof-popup { position: fixed; bottom: 170px; left: 20px; background: #fff; color: #333; padding: 15px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.2); display: none; z-index: 9998; border-right: 4px solid #25D366; max-width: 280px; font-size: 14px; animation: slideIn 0.5s forwards; }
         .social-proof-popup img { width: 40px; height: 40px; border-radius: 5px; float: right; margin-left: 10px; object-fit: cover;}
         @keyframes slideIn { from { transform: translateX(-100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        .wishlist-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 10px 0; }
+        .wishlist-item img { width: 50px; height: 50px; object-fit: cover; border-radius: 5px; }
 
         footer { background-color: #222; color: #ccc; padding: 40px 20px 20px; margin-top: 50px; }
         .footer-container { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; text-align: right; }
@@ -183,16 +187,23 @@
     <section class="category-section">
         <h2>👗 قسم الملابس</h2>
         
+        <!-- الفلاتر الجديدة -->
         <div class="filter-section">
-            <select id="sortSelect" class="sort-select" onchange="sortProducts()">
+            <select id="sortSelect" class="filter-select" onchange="applyFilters()">
                 <option value="default">ترتيب افتراضي</option>
                 <option value="low-high">السعر: من الأقل للأعلى</option>
                 <option value="high-low">السعر: من الأعلى للأقل</option>
             </select>
+            <select id="priceFilter" class="filter-select" onchange="applyFilters()">
+                <option value="all">كل الأسعار</option>
+                <option value="under20">أقل من 20$</option>
+                <option value="20to50">من 20$ إلى 50$</option>
+                <option value="over50">أكثر من 50$</option>
+            </select>
         </div>
 
         <div class="products-grid" id="products-container">
-            <div class="product-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="product-card" data-aos="fade-up" data-aos-delay="100" data-price="45">
                 <div class="badge badge-sale">خصم 20%</div>
                 <div class="product-actions">
                     <button class="action-btn" id="fav-1" onclick="toggleWishlist('fav-1', 'فستان صيفي أنيق', 45, 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?auto=format&fit=crop&w=500&q=60')">🤍</button>
@@ -212,7 +223,7 @@
                 </div>
             </div>
             
-            <div class="product-card" data-aos="fade-up" data-aos-delay="200">
+            <div class="product-card" data-aos="fade-up" data-aos-delay="200" data-price="20">
                 <div class="badge badge-hot">الأكثر مبيعاً 🔥</div>
                 <div class="product-actions">
                     <button class="action-btn" id="fav-2" onclick="toggleWishlist('fav-2', 'بلوزة كاجوال', 20, 'https://images.unsplash.com/photo-1539008835657-9e8e9680c956?auto=format&fit=crop&w=500&q=60')">🤍</button>
@@ -231,6 +242,9 @@
                     <button class="add-to-cart" onclick="addToCart('بلوزة كاجوال', 20, 'size-2')">أضيفي إلى السلة 🛒</button>
                 </div>
             </div>
+            
+            <!-- رسالة عدم وجود نتائج -->
+            <div class="no-results" id="noResults">عذراً، لم نجد منتجات تطابق بحثك أو الفلتر المحدد. 😔</div>
         </div>
     </section>
 
@@ -355,19 +369,52 @@
             setTimeout(() => { toast.classList.remove('show'); }, 3000);
         }
 
-        function sortProducts() {
+        // كود الفلترة والترتيب الجديد
+        function applyFilters() {
             let sortValue = document.getElementById('sortSelect').value;
+            let priceValue = document.getElementById('priceFilter').value;
             let container = document.getElementById('products-container');
-            let cards = Array.from(container.children);
-            cards.sort((a, b) => {
-                let priceA = parseFloat(a.querySelector('.price').innerText.replace('$', ''));
-                let priceB = parseFloat(b.querySelector('.price').innerText.replace('$', ''));
+            let cards = Array.from(container.querySelectorAll('.product-card'));
+            let noResults = document.getElementById('noResults');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
+                let price = parseFloat(card.getAttribute('data-price'));
+                let show = true;
+
+                // فلترة السعر
+                if (priceValue === 'under20' && price >= 20) show = false;
+                if (priceValue === '20to50' && (price < 20 || price > 50)) show = false;
+                if (priceValue === 'over50' && price <= 50) show = false;
+
+                if (show) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+
+            // إظهار رسالة عدم وجود نتائج
+            if (visibleCount === 0) {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+            }
+
+            // ترتيب المنتجات
+            let visibleCards = cards.filter(card => card.style.display !== 'none');
+            visibleCards.sort((a, b) => {
+                let priceA = parseFloat(a.getAttribute('data-price'));
+                let priceB = parseFloat(b.getAttribute('data-price'));
                 if (sortValue === 'low-high') return priceA - priceB;
                 if (sortValue === 'high-low') return priceB - priceA;
                 return 0;
             });
+
             container.innerHTML = '';
-            cards.forEach(card => container.appendChild(card));
+            visibleCards.forEach(card => container.appendChild(card));
+            container.appendChild(noResults);
         }
 
         let currentQVProduct = {};
@@ -410,12 +457,28 @@
             document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
         }, 1000);
 
+        // كود البحث المحدث
         document.getElementById('searchInput').addEventListener('input', function(e) {
             let val = e.target.value.toLowerCase();
-            document.querySelectorAll('.product-card').forEach(card => {
+            let cards = document.querySelectorAll('.product-card');
+            let noResults = document.getElementById('noResults');
+            let visibleCount = 0;
+
+            cards.forEach(card => {
                 let title = card.querySelector('h3').innerText.toLowerCase();
-                card.style.display = title.includes(val) ? 'block' : 'none';
+                if (title.includes(val)) {
+                    card.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    card.style.display = 'none';
+                }
             });
+
+            if (visibleCount === 0) {
+                noResults.style.display = 'block';
+            } else {
+                noResults.style.display = 'none';
+            }
         });
 
         window.onscroll = function() {
